@@ -304,14 +304,14 @@ void MainWindow::on_pushButton_clicked()
         ui->menu_2->clear();
         m->GetMenu(ui->menu_2);
         ui->menuBar->actions()[2]->setVisible(true);
-        this->setWindowTitle(m->GetName());
+        //this->setWindowTitle(m->GetName());
 
         camera->setFieldOfView(60.0f);
         QVector3D pos(-float(cos(beta)*cos(alpha))*radius,
-                    float(sin(beta))*radius,
+                    0.95 + float(sin(beta))*radius,
                     float(cos(beta)*sin(alpha))*radius);
         camera->setPosition(pos);
-        camera->setViewCenter(QVector3D(0.0, 0.25, 0.0));
+        camera->setViewCenter(QVector3D(0.0, 0.95, 0.0));
         uprend->start();
     }
     else

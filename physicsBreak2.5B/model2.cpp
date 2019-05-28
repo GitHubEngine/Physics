@@ -12,27 +12,27 @@ Model2::Model2()
     length = 0.2;
     psi_dot = 500;
     phi_dot = 0;
+    theta_dot = 0;
+    phi = 0;
+    psi = 0;
     theta = 1.57;
 
-    phi = 0;
-
-
+    LoadModel();
+    CalculateConstants();
+    SetTransform();
 
     t = new QElapsedTimer();
-
-    LoadModel();
-
 
     i1 = new QLabel("Угол отклонения: 0.0 рад");
     inf->addWidget(i1);
 
     {
-        QLabel *k = new QLabel(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
+        QLabel *k = new QLabel(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
         s1 = new QSlider(Qt::Horizontal); s1->setMinimum(15); s1->setMaximum(20); s1->setValue(int(length * 100.));
         connect(s1, &QSlider::valueChanged, [=]()
         {
         length = double(s1->value()) * 0.01;
-        k->setText(QString("Длинна от вертикальной оси до диска: %1 м").arg(length));
+        k->setText(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
         SetTransform();
         });
         set->addWidget(k);
@@ -74,7 +74,7 @@ Model2::Model2()
         set->addWidget(s4);
     }
     {
-        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(phi_dot));
+        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(phi_dot));
         s5 = new QSlider(Qt::Horizontal); s5->setMinimum(-30); s5->setMaximum(30); s5->setValue(int(phi_dot * 10.));
         connect(s5, &QSlider::valueChanged, [=]()
         {
@@ -85,35 +85,31 @@ Model2::Model2()
         set->addWidget(s5);
     }
     {
-        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
+        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(theta));
         s6 = new QSlider(Qt::Horizontal); s6->setMinimum(785); s6->setMaximum(1570); s6->setValue(int(theta * 1000));
         connect(s6, &QSlider::valueChanged, [=]()
         {
         theta = double(s6->value()) * 0.001;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(theta));
+        k->setText(QString("Угол наклона от вертикальной оси: %1 рад").arg(theta));
+        SetTransform();
         });
         set->addWidget(k);
         set->addWidget(s6);
     }
-
-
-
-
 }
-
 
 void Model2::SetTransform()
 {
-    QVector3D diskPos = QVector3D(cos(PI / 2 - theta)*sin(phi)*(0.56 + 10 * length),
-    sin(PI / 2 - theta)*(0.56 + 10 * length),
-    cos(PI / 2 - theta)*cos(phi)*(0.56 + 10 * length));
+    diskPos = QVector3D(cos(PI / 2 - theta)*sin(phi)*(5 * length - 1.1),
+    0.95 + sin(PI / 2 - theta)*(5 * length - 1.1),
+    cos(PI / 2 - theta)*cos(phi)*(5 * length - 1.1));
 
     nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), theta * toGrad - 90);
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
 
-    tr1->setScale3D(QVector3D(radius / 0.8, radius / 0.8, 1.0));
-    tr1->setTranslation(diskPos * (length - 0.35) / 0.2);
+    tr1->setScale3D(QVector3D(3 * radius, 3 * radius, 0.3));
+    tr1->setTranslation(diskPos);
 }
 
 void Model2::lock(bool b)
@@ -228,8 +224,12 @@ void Model2::Transform()
     tr1->setRotation(precession * nutation * rotation);
     tr2->setRotation(precession * nutation);
     tr3->setRotation(precession);
-    SetTransform();
 
+    diskPos = QVector3D(cos(PI / 2 - theta)*sin(phi)*(5 * length - 1.1),
+    0.95 + sin(PI / 2 - theta)*(5 * length - 1.1),
+    cos(PI / 2 - theta)*cos(phi)*(5 * length - 1.1));
+
+    tr1->setTranslation(diskPos);
 }
 
 void Model2::LoadModel()
@@ -254,6 +254,11 @@ void Model2::LoadModel()
     stand->addComponent(tr4);
 
 
+    tr1->setTranslation(QVector3D(0.0, 0.95, 0.0));
+    tr2->setTranslation(QVector3D(0.0, 0.95, 0.0));
+    tr3->setTranslation(QVector3D(0.0, 0.95, 0.0));
+    tr4->setTranslation(QVector3D(0.0, 0.95, 0.0));
+
     tr1->setScale(0.25);
     tr2->setScale(0.25);
     tr3->setScale(0.25);
@@ -264,7 +269,7 @@ void Model2::Update(double dt)
 {
 
     double delt = double(t->elapsed()) * 1e-3;
-    for (double i = 0; i * 1e-5 < delt; ++i)
+    for (double i = 0; i * 1e-5 < delt / 4; ++i)
         Compute(1e-5);
     Transform();
     t->restart();
