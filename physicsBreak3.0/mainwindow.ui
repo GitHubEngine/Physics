@@ -271,7 +271,7 @@
           <item>
            <widget class="QPushButton" name="startBut">
             <property name="text">
-             <string>Запуск маятника</string>
+             <string>Начать эксперимент!</string>
             </property>
            </widget>
           </item>

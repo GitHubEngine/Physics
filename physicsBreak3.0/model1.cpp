@@ -59,7 +59,7 @@ Model1::Model1()
 
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
-    cGraf = new QCheckBox("Моментально построение графиков");
+    cGraf = new QCheckBox("Моментальное построение графиков");
     connect(sGraf, &QSlider::valueChanged, [=](int d){
         lGraf->setText(QString("Количество значений: %1").arg(d));
     });
@@ -297,7 +297,7 @@ void Model1::GetMenu(QMenu *m)
     QMenu *a1 = new QMenu("Графики энергии", m);
     QAction *a1_1 = new QAction("Потенциальная энергия", a1);
     QAction *a1_2 = new QAction("Кинетическая энергия", a1);
-    QAction *a1_3 = new QAction("Полня энергия", a1);
+    QAction *a1_3 = new QAction("Полная энергия", a1);
 
     m->addMenu(a1);
     a1->addAction(a1_1);
