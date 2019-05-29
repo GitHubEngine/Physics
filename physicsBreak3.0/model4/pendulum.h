@@ -1,7 +1,6 @@
 #ifndef PENDULUM_H
 #define PENDULUM_H
 
-#include "materialpoint.h"
 #include "bullet.h"
 
 namespace physics {

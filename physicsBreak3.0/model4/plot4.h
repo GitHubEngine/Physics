@@ -21,20 +21,21 @@ public:
 
     void Update();
     void BuildMySpecificPlot();
+    void isFixed(bool fixed);
 
 private:
     Ui::Plot4 *ui;
 
     std::function<double()> getarg;
     std::function<double()> getvalue;
-    double args_start, args_end, values_start, values_end;
+    void Draw();
 
     QCustomPlot *plot4;
-
+    double args_start, args_end, values_start, values_end;
+    QCustomPlot *plot;
     QList<double> args;
     QList<double> values;
-
-    void Draw();
+    bool _isFixed = true;
 };
 
 #endif

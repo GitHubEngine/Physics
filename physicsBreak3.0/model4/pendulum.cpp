@@ -20,7 +20,6 @@ QVector3D physics::pendulum::pos(const float t)
 {
     A = B->v(0).x() * B->m() / (B->m() + m()) / omega;
     float x = A * sinf(omega * t);
-    //return { x, l - sqrtf(l * l - x * x), 0 };
     return { x, Ep(t) / (B->m() + m()) / g, 0 };
 }
 

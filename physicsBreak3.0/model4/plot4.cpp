@@ -33,7 +33,7 @@ void Plot4::Update()
 {
     args.append(getarg());
     values.append(getvalue());
-    if (args.size() >= 2500)
+    if (args.size() >= 250000)
     {
         args.removeAt(0);
         values.removeAt(0);
@@ -45,18 +45,23 @@ void Plot4::BuildMySpecificPlot()
 {
     args.clear();
     values.clear();
-    args.append(sqrt(10.));
-    args.append(10);
-    values.append(getvalue() * sqrt(10.));
-    values.append(getvalue() * 10);
+    args.append(1./sqrt(20e-3));
+    args.append(1./sqrt(5e-3));
+    values.append(getvalue() / sqrt(20e-3));
+    values.append(getvalue() / sqrt(5e-3));
     Draw();
+}
+
+void Plot4::isFixed(bool fixed)
+{
+    _isFixed = fixed;
 }
 
 void Plot4::Draw()
 {
     plot4->graph(0)->setData(args.toVector(), values.toVector(), true);
     double d = args_end / 10.;
-    if (args.last() > args_end - d)
+    if (!_isFixed && args.last() > args_end - d)
         plot4->xAxis->setRange(args.last() - args_end + d, args.last() + d);
     plot4->replot();
 }

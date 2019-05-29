@@ -17,32 +17,31 @@ Model4::Model4()
     opt         = new QVBoxLayout;
     inf         = new QVBoxLayout;
 
-
     // init laboratry
     addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
     addObject(root, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 
-
     lab->setMesh(":/Stands/Math4/lab.obj");
     lab->setTexture(":/Stands/Math4/lab.png");
-    lab->setPosition({ 0, 0, 0 });
+    lab->setPosition(QVector3D(0, 0, 0));
 
     bullet->setMesh(":/Stands/Math4/bullet.obj");
     bullet->setTexture(":/Stands/Math4/bullet.png");
-    bullet->setPosition({ -2.65f, 0.34f, 1.14f });
+    bullet->setPosition(QVector3D(-2.65f, 0.34f, 1.14f));
     bullet->setScale(0.1f);
     bullet->set_r(bullet->transform()->translation());
+
 
     pendulum->setMesh(":/Stands/Math4/pendulum_bullet.obj");    // загрузить в память, чтобы не мигало при столкновении
     pendulum->setTexture(":/Stands/Math4/pendulum_bullet.png"); // загрузить в память, чтобы не мигало при столкновении
     pendulum->setMesh(":/Stands/Math4/pendulum.obj");
     pendulum->setTexture(":/Stands/Math4/pendulum.png");
-    pendulum->setPosition({ -0.22f, 3.2f, 1.14f });
+    pendulum->setPosition(QVector3D(-0.22f, 3.2f, 1.14f));
     pendulum->set_r(pendulum->transform()->translation());
 
     measurer->setMesh(":/Stands/Math4/measurer.obj");
     measurer->setTexture(":/Stands/Math4/measurer.png");
-    measurer->setPosition({ 0.07f, 0.395f, 0.96f });
+    measurer->setPosition(QVector3D(0.07f, 0.395f, 0.96f));
     measurer->set_r(measurer->transform()->translation());
 
     B->setStartValue(0);
@@ -58,14 +57,12 @@ Model4::Model4()
     M->setStartValue(0);
     M->setEndValue(physics::duration);
 
-    shoot->addAnimation(B);
     swing->addAnimation(P);
     swing->addAnimation(M);
+    shoot->addPause(10);
+    shoot->addAnimation(B);
     shoot->addAnimation(swing);
 
-
-    //lightEntity->entity()->addComponent(light);
-    //lightEntity->setPosition({ 0, 5, 0 });
 
 
 
@@ -121,7 +118,6 @@ Model4::Model4()
         k_label->setText(text);
     });
     k_slider->setValue(12500);
-    k_slider->setObjectName("k_slider");
     b_slider = new QSlider(Qt::Horizontal);
     b_slider->setRange(15, 25);
     b_slider->setSingleStep(1);
@@ -132,10 +128,8 @@ Model4::Model4()
         b_label->setText(text);
     });
     b_slider->setValue(20);
-    b_slider->setObjectName("b_slider");
 
     move_plot_checkbox->setCheckState(Qt::CheckState::Checked);
-
 
     inf->addWidget(move_plot_checkbox);
     inf->addWidget(move_label);
@@ -153,36 +147,6 @@ Model4::Model4()
 
 }
 
-float Model4::get_l() const
-{
-    return physics::l;
-}
-
-float Model4::get_g() const
-{
-    return physics::g;
-}
-
-float Model4::get_k() const
-{
-    return bullet->k();
-}
-
-float Model4::get_b() const
-{
-    return bullet->b();
-}
-
-float Model4::get_T() const
-{
-    return physics::T;
-}
-
-float Model4::get_omega() const
-{
-    return physics::omega;
-}
-
 float Model4::get_time() const
 {
     return pendulum->getTime();
@@ -198,22 +162,6 @@ QVBoxLayout *Model4::get_inf() const
     return inf;
 }
 
-
-physics::bullet *Model4::get_bullet() const
-{
-    return bullet;
-}
-
-physics::pendulum *Model4::get_pendulum() const
-{
-    return pendulum;
-}
-
-physics::measurer *Model4::get_measurer() const
-{
-    return measurer;
-}
-
 void Model4::CreatePlot(int plotID) const
 {
     Plot4 *plot = nullptr;
@@ -223,99 +171,89 @@ void Model4::CreatePlot(int plotID) const
     case 0:{
     plot = new  Plot4(
                 [this]()->double{ return double(get_time()); },
-                [this]()->double{ return double(get_pendulum()->Ek(get_time())); },
+                [this]()->double{ return double(pendulum->Ek(get_time())); },
                 "Время, с", "Кинетическая энергия, Дж",
                 0, double(2.f * physics::T),
-                0, double(1.2 * get_pendulum()->Ek(0)));
+                0, double(1.2f * pendulum->Ek(0)));
     plot->setWindowTitle("График кинетической энергии маятника");
-    plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
-    connect(get_pendulum(), &physics::MaterialPoint::timeChanged, plot,  &Plot4::Update);
-    plot->show();
 
     break;}
     case 1:{
         plot = new Plot4(
                         [this]()->double{ return double(get_time()); },
-                        [this]()->double{ return double(get_pendulum()->Ep(get_time())); },
+                        [this]()->double{ return double(pendulum->Ep(get_time())); },
                         "Время, с", "Потенциальная энергия, Дж",
                         0, double(2.f * physics::T),
-                        0, double(1.2 * get_pendulum()->Ep(physics::T / 4.f)));
+                        0, double(1.2f * pendulum->Ep(physics::T / 4.f)));
             plot->setWindowTitle("График потенциальной энергии маятника");
-            plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
-            connect(get_pendulum(), &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
-            plot->show();
 
     break;}
     case 2:{
-        physics::pendulum *p = get_pendulum();
         plot = new Plot4(
                     [this]()->double{ return double(get_time()); },
-                    [this]()->double{ return double(get_pendulum()->pos(get_time()).x()); },
+                    [this]()->double{ return double(pendulum->pos(get_time()).x()); },
                     "Время, с", "Смещение относительно положения равновесия, м",
                     0, double(2.f * physics::T),
-                    -double(p->A),
-                    double(p->A));
+                    -double(pendulum->A),
+                    double(pendulum->A));
         plot->setWindowTitle("График смещения маятника относительно положения равновесия");
-        plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
-        connect(p, &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
-        plot->show();
     break;}
     case 3:{
         plot = new Plot4(
                     [this]()->double{ return double(get_time()); },
-                    [this]()->double{ return double(get_pendulum()->v(get_time()).length()); },
+                    [this]()->double{ return double(pendulum->v(get_time()).length()); },
                     "Время, с", "Скорость маятника, м/с",
                     0, double(2.f * physics::T),
                     -10, 10);
         plot->setWindowTitle("График скорости маятника");
         plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
-        connect(get_pendulum(), &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
-        plot->show();
     break;}
     case 4:{
             plot = new Plot4(
                         []()->double{ return 0.; },
-                        [this]()->double{ return double(get_b() * sqrtf(get_k()));},
+                        [this]()->double{ return double(bullet->b() * sqrtf(bullet->k()));},
                         "Обратный корень из массы пули, кг^(-1/2)", "Скорость пули, м/с",
-                        0, 15,
-                        0, 15);
+                        0, 20,
+                        0, 45);
             plot->setWindowTitle("График скорости пули от обратного квадратного корная массы пули");
             plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
             plot->BuildMySpecificPlot();
-            connect(get_opt()->findChild<QSlider*>("b_slider"), &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
-            connect(get_opt()->findChild<QSlider*>("k_slider"), &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
-            plot->show();
+            connect(b_slider, &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
+            connect(k_slider, &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
     break;}
 
     case 5:{
-            physics::pendulum *p = get_pendulum();
            plot = new Plot4(
                         [this]()->double{ return double(get_time()); },
-                        [this]()->double{ return double(asinf((get_pendulum()->pos(get_time()).x() / get_l()))); },
+                        [this]()->double{ return double(asinf(pendulum->pos(get_time()).x() / physics::l)); },
                         "Время, с", "Отклонение маятника, рад",
                         0, double(2.f * physics::T),
                         -M_PI_2, M_PI_2);
             plot->setWindowTitle("График отклонения маятника от положения равновесия");
-            connect(p, &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
-            plot->show();
     break;}
 
 
     case 6:{
         plot = new Plot4(
                     [this]()->double{ return double(get_time()); },
-                    [this]()->double{ return double(get_pendulum()->v(get_time()).length() / get_l() *
-                                          get_pendulum()->v(get_time()).x() /
-                                      abs(get_pendulum()->v(get_time()).x())); },
+                    [this]()->double{ return double(pendulum->v(get_time()).length() / physics::l *
+                                          pendulum->v(get_time()).x() /
+                                      abs(pendulum->v(get_time()).x())); },
                     "Время, с", "Угловая скорость, рад/с",
                     0, double(2.f * physics::T),
                     -M_PI_2, M_PI_2);
         plot->setWindowTitle("График угловой скорости маятника");
-        connect(get_pendulum(), &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
-        plot->show();
     break;}
 
     }
+    if (plot) {
+        plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
+        plot->isFixed(move_plot_checkbox->isChecked());
+        QObject::connect(move_plot_checkbox, &QCheckBox::toggled, plot, &Plot4::isFixed);
+        connect(pendulum, &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
+        plot->show();
+    }
+
 }
 
 
@@ -372,9 +310,11 @@ void Model4::lock(bool)
         pendulum->setTexture(":/Stands/Math4/pendulum.png");
         measurer->move(0);
         bullet->move(0);
-        bullet->setScale(0.1f);
     }
     else {
+        float t = physics::d / bullet->v(0).x();
+        B->setDuration(int(t * 1e3f));
+        B->setEndValue(t);
         shoot->start();
     }
 }

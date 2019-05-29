@@ -1,7 +1,6 @@
 #ifndef MEASURER_H
 #define MEASURER_H
 
-#include "materialpoint.h"
 #include "pendulum.h"
 
 namespace physics {

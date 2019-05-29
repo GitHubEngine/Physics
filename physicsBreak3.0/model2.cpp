@@ -45,12 +45,12 @@ Model2::Model2()
     inf->addWidget(i1);
 
     {
-        QLabel *k = new QLabel(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
+        QLabel *k = new QLabel(QString("Расстояние от стержня до диска: %1 м").arg(length));
         s1 = new QSlider(Qt::Horizontal); s1->setMinimum(15); s1->setMaximum(20); s1->setValue(int(length * 100.));
         connect(s1, &QSlider::valueChanged, [=]()
         {
         length = double(s1->value()) * 0.01;
-        k->setText(QString("Длина от вертикальной оси до диска: %1 м").arg(length));
+        k->setText(QString("Расстояние от стержня до диска: %1 м").arg(length));
         SetTransform();
         });
         set->addWidget(k);
@@ -63,7 +63,7 @@ Model2::Model2()
         connect(s2, &QSlider::valueChanged, [=]()
         {
         mass = double(s2->value()) * 0.1;
-        k->setText(QString("Масса диска: %1кг").arg(mass));
+        k->setText(QString("Масса диска: %1 кг").arg(mass));
         });
         set->addWidget(k);
         set->addWidget(s2);
@@ -81,34 +81,34 @@ Model2::Model2()
         set->addWidget(s3);
     }
     {
-        QLabel *k = new QLabel(QString("Скорость вращения диска: %1 град/с").arg(psi_dot));
+        QLabel *k = new QLabel(QString("Угловая скорость вращения диска: %1 рад/с").arg(psi_dot));
         s4 = new QSlider(Qt::Horizontal); s4->setMinimum(500); s4->setMaximum(1000); s4->setValue(int(psi_dot));
         connect(s4, &QSlider::valueChanged, [=]()
         {
         psi_dot = s4->value();
-        k->setText(QString("Скорость вращения диска: %1 град/с").arg(psi_dot));
+        k->setText(QString("Угловая скорость вращения диска: %1 рад/с").arg(psi_dot));
         });
         set->addWidget(k);
         set->addWidget(s4);
     }
     {
-        QLabel *k = new QLabel(QString("Начальня скорость прецессии диска: %1 рад/с").arg(phi_dot));
+        QLabel *k = new QLabel(QString("Начальная скорость прецессии гироскопа: %1 рад/с").arg(phi_dot));
         s5 = new QSlider(Qt::Horizontal); s5->setMinimum(-30); s5->setMaximum(30); s5->setValue(int(phi_dot * 10.));
         connect(s5, &QSlider::valueChanged, [=]()
         {
         phi_dot = double(s5->value()) * 0.1;
-        k->setText(QString("Начальня скорость прецессии диска: %1 рад/с").arg(phi_dot));
+        k->setText(QString("Начальная скорость прецессии гироскопа: %1 рад/с").arg(phi_dot));
         });
         set->addWidget(k);
         set->addWidget(s5);
     }
     {
-        QLabel *k = new QLabel(QString("Угол наклона от вертикальной оси: %1 рад").arg(theta));
+        QLabel *k = new QLabel(QString("Угол отклонения от вертикальной оси: %1 рад").arg(theta));
         s6 = new QSlider(Qt::Horizontal); s6->setMinimum(785); s6->setMaximum(1570); s6->setValue(int(theta * 1000));
         connect(s6, &QSlider::valueChanged, [=]()
         {
         theta = double(s6->value()) * 0.001;
-        k->setText(QString("Угол наклона от вертикальной оси: %1 рад").arg(theta));
+        k->setText(QString("Угол отклонения от вертикальной оси: %1 рад").arg(theta));
         SetTransform();
         });
         set->addWidget(k);
@@ -323,7 +323,7 @@ void Model2::CreatePlot(int plotID)
         break;
         case 1:
             plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetTheta(); }, "Углол θ, рад", PI / 2);
+                            [this]()->double{ return this->GetTheta(); }, "Угол θ, рад", PI / 2);
         break;
     }
 
@@ -361,8 +361,8 @@ void Model2::Update_plot(double dt, int maxtime)
 
 void Model2::GetMenu(QMenu *m)
 {
-    QAction *a1_1 = new QAction("Грфик зависимости θ от φ", m);
-    QAction *a1_2 = new QAction("Грфик зависимости θ от времени", m);
+    QAction *a1_1 = new QAction("График зависимости θ от φ", m);
+    QAction *a1_2 = new QAction("График зависимости θ от времени", m);
     m->addAction(a1_1);
     m->addAction(a1_2);
 
