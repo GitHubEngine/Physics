@@ -23,6 +23,10 @@ Model2::Model2()
 
     t = new QElapsedTimer();
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
+
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
     cGraf = new QCheckBox("Моментальное построение графиков");
@@ -346,8 +350,9 @@ void Model2::Update_plot(double dt, int maxtime)
     for (int i=0;i<maxtime;i++){
         for (int j=0;j<timesPrint;++j)
         {
-            time += dt;
-            Compute(dt);
+            double delt = 0.001;
+            for (double i = 0; i * 1e-5 < delt; ++i)
+                Compute(1e-5);
         }
         for (auto plot : plots)
             plot->Update();

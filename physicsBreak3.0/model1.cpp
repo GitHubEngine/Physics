@@ -36,6 +36,8 @@ Model1::Model1()
     beta = 0.;
     omega = 0.;
 
+
+
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
     addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
@@ -56,6 +58,9 @@ Model1::Model1()
     tr3->setTranslation(QVector3D(float(0.2 + 1.3 * r), 1.08089f, 0.f));
 
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
 
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);

@@ -9,6 +9,11 @@ Model8::Model8()
     LoadModel();
 
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
+
+
 }
 
 

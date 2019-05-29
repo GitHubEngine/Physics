@@ -20,6 +20,9 @@ Model4::Model4()
     // init laboratry
     addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
     addObject(root, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    opt->addWidget(nam);
 
     lab->setMesh(":/Stands/Math4/lab.obj");
     lab->setTexture(":/Stands/Math4/lab.png");
@@ -73,7 +76,7 @@ Model4::Model4()
     b_label             = new QLabel("");
     move_label          = new QLabel("Смещение маятника: 0.000 м");
     speed_label         = new QLabel("Скорость пули: 00.000 м/с");
-    move_plot_checkbox  = new QCheckBox("Фиксировать координатну сетку на графиках");
+    move_plot_checkbox  = new QCheckBox("Фиксировать координатную сетку на графиках");
 
     QObject::connect(pendulum, &physics::MaterialPoint::timeChanged, [&]() {
         QString text;

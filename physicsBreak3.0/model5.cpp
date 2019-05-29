@@ -22,7 +22,10 @@ Model5::Model5()
     s3 = new QSlider(Qt::Horizontal); s3->setMinimum(100); s3->setMaximum(1400); s3->setValue(int(D * 1000));
 
     LoadModel();
-    Transform();    
+    Transform();
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
 
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
@@ -308,13 +311,13 @@ void Model5::CreatePlot(int plotID)
 
     break;}
     case 2:{
-    YSize= E;
+    YSize= std::max(E1, E2);
     plot = new Plot([this]()->double{ return this->t; },
                         [this]()->double{ return this->E1; }, "Энергия первого маятника, Дж",abs(YSize));
 
     break;}
     case 3:{
-    YSize= E;
+    YSize= std::max(E1, E2);
     plot = new Plot([this]()->double{ return this->t; },
                         [this]()->double{ return this->E2; }, "Энергия второго маятника, Дж",abs(YSize));
 

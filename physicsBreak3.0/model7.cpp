@@ -12,6 +12,10 @@ Model7::Model7()
     set =  new QVBoxLayout();
     LoadModel();
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
+
     tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
 
 

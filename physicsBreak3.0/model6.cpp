@@ -15,6 +15,9 @@ Model6::Model6()
     l_st0=5; //длина стержня
     r1_0 = 0.5; //расстояние от оси вращения до диска, который перемещается
     r2_0 = 4.8; //расстояние от оси вращения до неподвижного диска
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
     set->addWidget(new QLabel(QString("Масса стрежня: %1 кг").arg(m_st0)));
     set->addWidget(new QLabel(QString("Длинна стержня: %1 м").arg(l_st0)));
     QLabel *a1 = new QLabel(QString("Высота от оси вращения закреплённого диска: %1 м").arg(r2_0));
