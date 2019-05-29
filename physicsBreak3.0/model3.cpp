@@ -60,11 +60,11 @@ Model3::Model3()
     Transform();
 
 
-    QLabel *lGraf = new QLabel(QString("Количетсво значений: %1").arg(500));
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
     cGraf = new QCheckBox("Моментальное построение графиков");
     connect(sGraf, &QSlider::valueChanged, [=](int d){
-        lGraf->setText(QString("Количечетсво значений: %1").arg(d));
+        lGraf->setText(QString("Количество значений: %1").arg(d));
     });
     cGraf->setCheckState(Qt::Checked);
     connect(cGraf, &QCheckBox::stateChanged, [=](int k){

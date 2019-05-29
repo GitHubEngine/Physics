@@ -23,7 +23,25 @@ Model2::Model2()
 
     t = new QElapsedTimer();
 
-    i1 = new QLabel("Угол отклонения: 0.0 град");
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментальное построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количество значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
+    i1 = new QLabel("Угол θ: 0.0 град");
+    i2 = new QLabel("Угол φ: 0.0 град");
     inf->addWidget(i1);
 
     {
@@ -279,16 +297,18 @@ void Model2::Update(double dt)
         Compute(1e-5);
     Transform();
     t->restart();
-    for (auto plot : plots)
-        if (plot->GetState() == Plot::State::Active)
-            plot->Update();
-        else
-        {
-            plot->Destroy();
-            plots.removeOne(plot);
-        }
+    if (!cGraf->checkState() && (int64_t(time * 1000) % timesPrint == 0))
+        for (auto plot : plots)
+            if (plot->GetState() == Plot::State::Active)
+                plot->Update();
+            else
+            {
+                plot->Destroy();
+                plots.removeOne(plot);
+            }
 
-    i1->setText(QString("Угол отклонения: %1 град/c").arg(this->GetTheta() * toGrad, 0, 'f', 2));
+    i1->setText(QString("Угол θ: %1 град/c").arg(this->GetTheta() * toGrad, 0, 'f', 2));
+    i2->setText(QString("Угол φ: %1 град/c").arg(this->GetPhi() * toGrad, 0, 'f', 2));
 }
 
 void Model2::CreatePlot(int plotID)
@@ -297,14 +317,14 @@ void Model2::CreatePlot(int plotID)
 
     switch (plotID)
     {
-        /*case 0:
-            plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetPhi(); },  "Углол Phi");
+        case 0:
+            plot = new Plot([this]()->double{ return this->GetPhi(); },
+                            [this]()->double{ return this->GetTheta(); },  "Угол θ, рад", PI / 2, "Угол φ, рад");
         break;
         case 1:
             plot = new Plot([this]()->double{ return this->GetTime(); },
-                            [this]()->double{ return this->GetPsi(); }, "Углол Psi");
-        break;*/
+                            [this]()->double{ return this->GetTheta(); }, "Углол θ, рад", PI / 2);
+        break;
     }
 
 
@@ -313,6 +333,49 @@ void Model2::CreatePlot(int plotID)
         plot->show();
         plots.append(plot);
     }
+}
+
+void Model2::Update_plot(double dt, int maxtime)
+{
+    double stheta     = theta;
+    double sthetadot = theta_dot;
+    double sphi      = phi;
+    double sphidot   = phi_dot;
+    double spsi      = psi;
+    Init();
+    for (int i=0;i<maxtime;i++){
+        for (int j=0;j<timesPrint;++j)
+        {
+            time += dt;
+            Compute(dt);
+        }
+        for (auto plot : plots)
+            plot->Update();
+    }
+    theta     = stheta   ;
+    theta_dot = sthetadot;
+    phi       = sphi     ;
+    phi_dot   = sphidot  ;
+    psi       = spsi     ;
+}
+
+void Model2::GetMenu(QMenu *m)
+{
+    QAction *a1_1 = new QAction("Грфик зависимости θ от φ", m);
+    QAction *a1_2 = new QAction("Грфик зависимости θ от времени", m);
+    m->addAction(a1_1);
+    m->addAction(a1_2);
+
+    connect(a1_1, &QAction::triggered, [=](){
+        this->CreatePlot(0);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_2, &QAction::triggered, [=](){
+        this->CreatePlot(1);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
 }
 
 

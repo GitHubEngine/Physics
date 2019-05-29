@@ -62,90 +62,20 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>300</width>
+           <width>350</width>
            <height>16777215</height>
           </size>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QWidget" name="numbers" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="1" column="4">
-              <widget class="QPushButton" name="room3">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/3.jpg);</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="room4">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/4.jpg);</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QPushButton" name="room5">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/5.jpg);</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="room2">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/2.jpg);</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="4">
               <widget class="QPushButton" name="room6">
                <property name="minimumSize">
@@ -187,6 +117,63 @@
                </property>
               </widget>
              </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="room5">
+               <property name="minimumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/5.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="room2">
+               <property name="minimumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/2.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="room4">
+               <property name="minimumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/4.jpg);</string>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="2">
               <widget class="QPushButton" name="room7">
                <property name="minimumSize">
@@ -203,6 +190,25 @@
                </property>
                <property name="styleSheet">
                 <string notr="true">background-image: url(:/Res/7.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QPushButton" name="room3">
+               <property name="minimumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>93</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/3.jpg);</string>
                </property>
               </widget>
              </item>
@@ -290,31 +296,46 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="Nstu">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>120</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::AutoText</enum>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="resq.qrc">:/Res/NSTU.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="Nstu">
+               <property name="minimumSize">
+                <size>
+                 <width>300</width>
+                 <height>122</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>300</width>
+                 <height>122</height>
+                </size>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::AutoText</enum>
+               </property>
+               <property name="pixmap">
+                <pixmap resource="resq.qrc">:/Res/NSTU.png</pixmap>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

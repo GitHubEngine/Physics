@@ -8,8 +8,8 @@ namespace physics {
 class bullet : public MaterialPoint
 {
 private:
-    float _k = 10.00f; // жёсткость пружины
-    float _b = 0.005f; // деформация пружины
+    float _k; // жёсткость пружины
+    float _b; // деформация пружины
 public:
     bullet(const float _m, Qt3DCore::QNode *parent = nullptr);
     void      move(const float t) override;

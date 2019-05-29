@@ -10,8 +10,8 @@ class pendulum : public MaterialPoint
 {
 public:
     float A    ; // амплитуда колебаний по оси x
-    bullet &B  ; // пуля, с которой произошло столкновение
-    pendulum(const float _m, bullet &_B, Qt3DCore::QNode *parent = nullptr);
+    bullet *B  ; // пуля, с которой произошло столкновение
+    pendulum(const float _m, bullet *_B, Qt3DCore::QNode *parent = nullptr);
     void      move(const float t) override;
     QVector3D pos (const float t) override;
     QVector3D v   (const float t) override;

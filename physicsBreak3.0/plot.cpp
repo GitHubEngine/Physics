@@ -2,7 +2,7 @@
 #include "ui_plot.h"
 #include "mainwindow.h"
 
-Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QString s,double ysize, QWidget *p) :
+Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QString s,double ysize, QString xs, QWidget *p) :
     QMainWindow(p),
     ui(new Ui::Plot),
     getarg(getarg),
@@ -14,7 +14,7 @@ Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QSt
 
     plot = ui->PlotSurface;
 
-    plot->xAxis->setLabel("Время, мс");
+    plot->xAxis->setLabel(xs);
     plot->yAxis->setLabel(s);
 
 
@@ -30,10 +30,10 @@ Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QSt
 
 void Plot::resizeEvent(QResizeEvent *re)
 {
-    ui->PlotSurface->setGeometry(0, 0, re->size().width(), re->size().height() * 0.75);
+    ui->PlotSurface->setGeometry(0, 0, re->size().width(), int(re->size().height() * 0.75));
 }
 
-void Plot::closeEvent(QCloseEvent *ce)
+void Plot::closeEvent(QCloseEvent *)
 {
     state = State::Closed;
 }
@@ -65,8 +65,8 @@ void Plot::Update()
 void Plot::Draw(QVector<double> args, QVector<double> values)
 {
     plot->graph(0)->setData(args, values, true);
-    //if (args.last() > 18)
-    //    plot->xAxis->setRange(args.last() - 18, args.last() + 2);
+    if (args.last() > 8)
+        plot->xAxis->setRange(args.last() - 8, args.last() + 2);
     plot->replot();
 }
 

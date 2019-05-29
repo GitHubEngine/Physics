@@ -7,12 +7,12 @@ physics::bullet::bullet(const float _m, Qt3DCore::QNode *parent) :
 
 void physics::bullet::move(const float t)
 {
-    setPosition(pos(t));
+    setPosition(pos(t) + r());
 }
 
 QVector3D physics::bullet::pos(const float t)
 {
-    return v(0) * t + r();
+    return v(0) * t;
 }
 
 QVector3D physics::bullet::v(const float t)

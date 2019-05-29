@@ -4,159 +4,151 @@
 using namespace physics;
 Model4::Model4()
 {
-        root       = new Qt3DCore::QEntity;
-        lab        = new physics::object   (root);
-        bullet     = new physics::bullet   (0.01f, root);
-        pendulum   = new physics::pendulum (0.2f, *bullet, root);
-        measurer   = new physics::measurer (0.01f, *pendulum, root);
-        B          = new QPropertyAnimation(bullet  , "time");
-        P          = new QPropertyAnimation(pendulum, "time");
-        M          = new QPropertyAnimation(measurer, "time");
-        swing      = new QParallelAnimationGroup(root);
-        shoot      = new QSequentialAnimationGroup(root);
-        opt        = new QVBoxLayout;
-        inf        = new QVBoxLayout;
-
-       // init laboratry
-       addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
-       addObject(root, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
-
-        lab->setMesh(":/Stands/Math4/lab.obj");
-        lab->setTexture(":/Stands/Math4/lab.png");
-        lab->setPosition(QVector3D(0, 0, 0));
-
-        bullet->setMesh(":/Stands/Math4/bullet.obj");
-        bullet->setTexture(":/Stands/Math4/bullet.png");
-        bullet->setPosition(QVector3D(-2.65f, 0.34f, 1.14f)); // начало
-        //bullet->setPosition(QVector3D(-0.525f, 0.34f, 1.14f)); // конец
-        bullet->setScale(0.1f);
-        bullet->set_r(bullet->transform()->translation());
+    root        = new Qt3DCore::QEntity;
+    lab         = new physics::object(root);
+    bullet      = new physics::bullet   (0.01f, root);
+    pendulum    = new physics::pendulum (0.20f, bullet  , root);
+    measurer    = new physics::measurer (0.01f, pendulum, root);
+    B           = new QPropertyAnimation(bullet  , "time");
+    P           = new QPropertyAnimation(pendulum, "time");
+    M           = new QPropertyAnimation(measurer, "time");
+    swing       = new QParallelAnimationGroup(root);
+    shoot       = new QSequentialAnimationGroup(root);
+    opt         = new QVBoxLayout;
+    inf         = new QVBoxLayout;
 
 
-        pendulum->setMesh(":/Stands/Math4/pendulum.obj");
-        pendulum->setTexture(":/Stands/Math4/pendulum.png");
-        pendulum->setPosition(QVector3D(-0.22f, 3.2f, 1.14f));
-        pendulum->set_r(pendulum->transform()->translation());
+    // init laboratry
+    addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
+    addObject(root, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 
-        measurer->setMesh(":/Stands/Math4/measurer.obj");
-        measurer->setTexture(":/Stands/Math4/measurer.png");
-        measurer->setPosition(QVector3D(0.07f, 0.395f, 0.96f));
-        measurer->set_r(measurer->transform()->translation());
 
-       B->setStartValue(0);
-       B->setLoopCount(1);
+    lab->setMesh(":/Stands/Math4/lab.obj");
+    lab->setTexture(":/Stands/Math4/lab.png");
+    lab->setPosition({ 0, 0, 0 });
 
-       P->setDuration(physics::duration * 1000); // измеряется в милисекундах
-       P->setLoopCount(-1);
-       P->setStartValue(0);
-       P->setEndValue(physics::duration);
+    bullet->setMesh(":/Stands/Math4/bullet.obj");
+    bullet->setTexture(":/Stands/Math4/bullet.png");
+    bullet->setPosition({ -2.65f, 0.34f, 1.14f });
+    bullet->setScale(0.1f);
+    bullet->set_r(bullet->transform()->translation());
 
-       M->setDuration(physics::duration * 1000);
-       M->setLoopCount(-1);
-       M->setStartValue(0);
-       M->setEndValue(physics::duration);
+    pendulum->setMesh(":/Stands/Math4/pendulum_bullet.obj");    // загрузить в память, чтобы не мигало при столкновении
+    pendulum->setTexture(":/Stands/Math4/pendulum_bullet.png"); // загрузить в память, чтобы не мигало при столкновении
+    pendulum->setMesh(":/Stands/Math4/pendulum.obj");
+    pendulum->setTexture(":/Stands/Math4/pendulum.png");
+    pendulum->setPosition({ -0.22f, 3.2f, 1.14f });
+    pendulum->set_r(pendulum->transform()->translation());
 
-       swing->addAnimation(P);
-       swing->addAnimation(M);
-       shoot->addPause(10);
-       shoot->addAnimation(B);
-       shoot->addAnimation(swing);
-       QObject::connect(shoot, &QSequentialAnimationGroup::stateChanged,
-                        [&](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
-           if (newState == QAbstractAnimation::State::Running) {
-               float t = physics::d / bullet->v(0).x();
-               B->setDuration(int(t * 1e3f));
-               B->setEndValue(t);
-           }
-       });
-       QObject::connect(swing, &QSequentialAnimationGroup::stateChanged,
-                        [&](QAbstractAnimation::State newState, QAbstractAnimation::State oldState) {
-           if (newState == QAbstractAnimation::State::Running) {
-               bullet->setScale(0);
-               pendulum->setMesh(":/Stands/Math4/pendulum_bullet.obj");
-               pendulum->setTexture(":/Stands/Math4/pendulum_bullet.png");
-           }
-       });
+    measurer->setMesh(":/Stands/Math4/measurer.obj");
+    measurer->setTexture(":/Stands/Math4/measurer.png");
+    measurer->setPosition({ 0.07f, 0.395f, 0.96f });
+    measurer->set_r(measurer->transform()->translation());
+
+    B->setStartValue(0);
+    B->setLoopCount(1);
+
+    P->setDuration(physics::duration * 1000); // измеряется в милисекундах
+    P->setLoopCount(-1);
+    P->setStartValue(0);
+    P->setEndValue(physics::duration);
+
+    M->setDuration(physics::duration * 1000);
+    M->setLoopCount(-1);
+    M->setStartValue(0);
+    M->setEndValue(physics::duration);
+
+    shoot->addAnimation(B);
+    swing->addAnimation(P);
+    swing->addAnimation(M);
+    shoot->addAnimation(swing);
+
+
+    //lightEntity->entity()->addComponent(light);
+    //lightEntity->setPosition({ 0, 5, 0 });
 
 
 
+    // init options
+    bullet_mass_label   = new QLabel("");
+    pendulum_mass_label = new QLabel("");
+    k_label             = new QLabel("");
+    b_label             = new QLabel("");
+    move_label          = new QLabel("Смещение маятника: 0.000 м");
+    speed_label         = new QLabel("Скорость пули: 00.000 м/с");
+    move_plot_checkbox  = new QCheckBox("Фиксировать координатну сетку на графиках");
 
-       // init options
-       bullet_mass_label   = new QLabel("");
-       pendulum_mass_label = new QLabel("");
-       k_label             = new QLabel("");
-       b_label             = new QLabel("");
-       move_label          = new QLabel("Смещение маятника: 0.000 м");
-       speed_label         = new QLabel("Скорость пули: 00.000 м/с");
+    QObject::connect(pendulum, &physics::MaterialPoint::timeChanged, [&]() {
+        QString text;
+        float x = (measurer->transform()->translation() - measurer->r()).x() / 4;
+        text.sprintf("Смещение маятника: %0.3f м", double(x));
+        move_label->setText(text);
+        text.sprintf("Скорость пули: %02.3f м/с", double(bullet->v(0).x()));
+        speed_label->setText(text);
+        int s = int(pendulum->getTime());
+        int ms = int(1e3f * pendulum->getTime()) % 1000;
+        text.sprintf("Время: %02d:%02d:%02d.%03d", s / 3600, s / 60 % 60, s % 60, ms);
+    });
 
-       QObject::connect(pendulum, &physics::MaterialPoint::timeChanged, [&]() {
-           QString text;
-           float x = (measurer->transform()->translation() - measurer->r()).x() / 4;
-           text.sprintf("Смещение маятника: %0.3f м", double(x));
-           move_label->setText(text);
-           text.sprintf("Скорость пули: %02.3f м/с", double(bullet->v(0).x()));
-           speed_label->setText(text);
-           int s = int(pendulum->getTime());
-           int ms = int(1e3f * pendulum->getTime()) % 1000;
-           text.sprintf("Время: %02d:%02d:%02d.%03d", s / 3600, s / 60 % 60, s % 60, ms);
-       });
+    bullet_mass_slider = new QSlider(Qt::Horizontal);
+    bullet_mass_slider->setRange(5, 20);
+    bullet_mass_slider->setSingleStep(1);
+    QObject::connect(bullet_mass_slider, &QSlider::valueChanged, [&](int v) {
+        bullet->set_m(float(v) / 1e3f);
+        QString text;
+        text.sprintf("Масса пули: %0.3f кг", double(bullet->m()));
+        bullet_mass_label->setText(text);
+    });
+    bullet_mass_slider->setValue(12);
+    bullet_mass_slider->setObjectName("bullet_mass_slider");
+    pendulum_mass_slider = new QSlider(Qt::Horizontal);
+    pendulum_mass_slider->setRange(250, 500);
+    pendulum_mass_slider->setSingleStep(1);
+    QObject::connect(pendulum_mass_slider, &QSlider::valueChanged, [&](int v) {
+        pendulum->set_m(float(v) / 1e3f);
+        QString text;
+        text.sprintf("Масса подвеса маятника: %0.3f кг", double(pendulum->m()));
+        pendulum_mass_label->setText(text);
+    });
+    pendulum_mass_slider->setValue(375);
+    k_slider = new QSlider(Qt::Horizontal);
+    k_slider->setRange(12000, 13000);
+    k_slider->setSingleStep(1);
+    QObject::connect(k_slider, &QSlider::valueChanged, [&](int v) {
+        bullet->set_k(float(v));
+        QString text;
+        text.sprintf("Жёсткость пружины: %05.0f Н/м", double(bullet->k()));
+        k_label->setText(text);
+    });
+    k_slider->setValue(12500);
+    k_slider->setObjectName("k_slider");
+    b_slider = new QSlider(Qt::Horizontal);
+    b_slider->setRange(15, 25);
+    b_slider->setSingleStep(1);
+    QObject::connect(b_slider, &QSlider::valueChanged, [&](int v) {
+        bullet->set_b(float(v) / 1e3f);
+        QString text;
+        text.sprintf("Деформация пружины: %01.3f м", double(bullet->b()));
+        b_label->setText(text);
+    });
+    b_slider->setValue(20);
+    b_slider->setObjectName("b_slider");
 
-       bullet_mass_slider = new QSlider(Qt::Horizontal);
-       bullet_mass_slider->setRange(5, 20);
-       bullet_mass_slider->setSingleStep(1);
-       QObject::connect(bullet_mass_slider, &QSlider::valueChanged, [&](int v) {
-           bullet->set_m(float(v) / 1e3f);
-           QString text;
-           text.sprintf("Масса пули: %0.3f кг", double(bullet->m()));
-           bullet_mass_label->setText(text);
-       });
-       bullet_mass_slider->setValue(12);
-       bullet_mass_slider->setObjectName("bullet_mass_slider");
-       pendulum_mass_slider = new QSlider(Qt::Horizontal);
-       pendulum_mass_slider->setRange(250, 500);
-       pendulum_mass_slider->setSingleStep(1);
-       QObject::connect(pendulum_mass_slider, &QSlider::valueChanged, [&](int v) {
-           pendulum->set_m(float(v) / 1e3f);
-           QString text;
-           text.sprintf("Масса подвеса маятника: %0.3f кг", double(pendulum->m()));
-           pendulum_mass_label->setText(text);
-       });
-       pendulum_mass_slider->setValue(375);
-       k_slider = new QSlider(Qt::Horizontal);
-       k_slider->setRange(12000, 13000);
-       k_slider->setSingleStep(1);
-       QObject::connect(k_slider, &QSlider::valueChanged, [&](int v) {
-           bullet->set_k(float(v));
-           QString text;
-           text.sprintf("Жёсткость пружины: %05.0f Н/м", double(bullet->k()));
-           k_label->setText(text);
-       });
-       k_slider->setValue(12500);
-       k_slider->setObjectName("k_slider");
-       b_slider = new QSlider(Qt::Horizontal);
-       b_slider->setRange(15, 25);
-       b_slider->setSingleStep(1);
-       QObject::connect(b_slider, &QSlider::valueChanged, [&](int v) {
-           bullet->set_b(float(v) / 1e3f);
-           QString text;
-           text.sprintf("Деформация пружины: %01.3f м", double(bullet->b()));
-           b_label->setText(text);
-       });
-       b_slider->setValue(20);
-       b_slider->setObjectName("b_slider");
+    move_plot_checkbox->setCheckState(Qt::CheckState::Checked);
 
 
-       inf->addWidget(move_label);
-       inf->addWidget(speed_label);
+    inf->addWidget(move_plot_checkbox);
+    inf->addWidget(move_label);
+    inf->addWidget(speed_label);
 
-       opt->addWidget(bullet_mass_label);
-       opt->addWidget(bullet_mass_slider);
-       opt->addWidget(pendulum_mass_label);
-       opt->addWidget(pendulum_mass_slider);
-       opt->addWidget(k_label);
-       opt->addWidget(k_slider);
-       opt->addWidget(b_label);
-       opt->addWidget(b_slider);
+    opt->addWidget(bullet_mass_label);
+    opt->addWidget(bullet_mass_slider);
+    opt->addWidget(pendulum_mass_label);
+    opt->addWidget(pendulum_mass_slider);
+    opt->addWidget(k_label);
+    opt->addWidget(k_slider);
+    opt->addWidget(b_label);
+    opt->addWidget(b_slider);
 
 
 }

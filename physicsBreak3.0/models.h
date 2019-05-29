@@ -40,7 +40,7 @@ private:
     double A0, beta, omega0,omega, angle, t, r, c, k, m, R, J, A;
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1, *i2, *k1, *k2, *k3, *k4, *k5, *k6;
+    QLabel *i1, *i2, *i3, *i4, *k1, *k2, *k3, *k4, *k5, *k6;
     QSlider *s1, *s2, *s4, *s5, *s6;
     QCheckBox *cGraf;
     QSlider *sGraf;
@@ -90,6 +90,8 @@ private:
     QVector3D diskPos;
     QSlider *s1, *s2, *s3, *s4, *s5, *s6;
     QList<Plot *> plots;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
     double dy1(double arg);
     double dy2(double arg);
     double dy3(double arg);
@@ -109,7 +111,8 @@ public:
     Qt3DCore::QEntity *GetEntity(){return ent; }
     QVBoxLayout *GetSet(){return set; }
     QVBoxLayout *GetInf() {return inf; }
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
+    void Update_plot(double dt, int maxtime);
     QString GetName() {return "Моделирование прецессии и нутации гироскопа";}
     ~Model2(){}
     void SetTransform();
@@ -183,6 +186,7 @@ private:
     QLabel      *b_label              = nullptr;
     QLabel      *move_label           = nullptr;
     QLabel      *speed_label          = nullptr;
+    QCheckBox   *move_plot_checkbox        = nullptr;
 
 public:
     Model4();
@@ -222,22 +226,22 @@ private:
     void LoadModel();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1, *i2, *i3, *i4;
-    QSlider *s1, *s2, *s3, *s4, *s5, *s6;
+    QLabel *i1, *i2, *i3, *i4, *i5;
+    QSlider *s1, *s2, *s3, *s4, *s5, *s6, *s7;
     QCheckBox *cGraf;
     QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *pruz;
     QList<Plot *> plots;
     double YSize;
     double  k;              //коэффициент жесткости пружины, Н/м
-    double l=0.5;             //длина нити, м
+    double l;             //длина нити, м
     double m, M;             //масса маятника (шара), кг
     double w1;     //1 собственная частота, 1/с^2
     double Start_angle1, Start_angle2;
     double D;
     double w2;                      //2 собственная частота, 1/с^2
     const double rad=M_PI/180.;     //перевод градусов в радианы
-    double d, t, angle1, angle2, W, Wm, E1, E2;
+    double d, t, angle1, angle2, W, E1, E2, E;
 public:
     Model5();
     void Init();
@@ -255,6 +259,7 @@ public:
     double Get_Angle1();
     double Get_Angle2();
     void Get_W_Wm();
+    double Get_E();
     double Get_E1();
     double Get_E2();
     void Update_plot(double dt, int maxtime);

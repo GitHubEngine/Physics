@@ -57,11 +57,11 @@ Model1::Model1()
 
 
 
-    QLabel *lGraf = new QLabel(QString("Количечетсво значений: %1").arg(500));
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
     cGraf = new QCheckBox("Моментально построение графиков");
     connect(sGraf, &QSlider::valueChanged, [=](int d){
-        lGraf->setText(QString("Количечетсво значений: %1").arg(d));
+        lGraf->setText(QString("Количество значений: %1").arg(d));
     });
     cGraf->setCheckState(Qt::Checked);
     connect(cGraf, &QCheckBox::stateChanged, [=](int k){
@@ -77,7 +77,13 @@ Model1::Model1()
 
 
     i1 = new QLabel("Угол отклонения: 0.0 град");
+    i2 = new QLabel("Кинетическая энергия: 0.0 Дж");
+    i3 = new QLabel("Потенциальная энергия: 0.0 Дж");
+    i4 = new QLabel("Полная энергия: 0.0 Дж");
     inf->addWidget(i1);
+    inf->addWidget(i2);
+    inf->addWidget(i3);
+    inf->addWidget(i4);
 
     k1 = new QLabel("Начальный угол отклонения: 0.0 град");
     k2 = new QLabel("Коэффициент сопротивления: 0.0");
@@ -201,6 +207,9 @@ void Model1::Update(double dt)
 
 
     i1->setText(QString("Угол отклонения: %1 град").arg(angle * toGrad, 0, 'f', 2));
+    i2->setText(QString("Кинетическая энергия: %1 Дж").arg(GetEk(), 0, 'e', 4));
+    i3->setText(QString("Потенциальная энергия: %1 Дж").arg(GetEp(), 0, 'e', 4));
+    i4->setText(QString("Полная энергия: %1 Дж").arg(GetEk() + GetEp(), 0, 'e', 4));
 }
 
 void Model1::CreatePlot(int plotID)

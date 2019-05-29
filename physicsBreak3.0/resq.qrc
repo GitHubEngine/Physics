@@ -128,5 +128,10 @@
         <file>Stands/Math8/rope.jpg</file>
         <file>Stands/Math8/rope.obj</file>
         <file>Stands/Math8/shar.obj</file>
+        <file>Sup/Math4/help1.jpg</file>
+        <file>Sup/Math4/help2.bmp</file>
+        <file>Sup/Math4/help3.bmp</file>
+        <file>Sup/Math4/help4.bmp</file>
+        <file>Sup/Math4/help5.bmp</file>
     </qresource>
 </RCC>
