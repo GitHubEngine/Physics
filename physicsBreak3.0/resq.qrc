@@ -139,5 +139,13 @@
         <file>Res/6oborot.jpg</file>
         <file>Res/7galiley.jpg</file>
         <file>Res/8electro.jpg</file>
+        <file>Sup/Math5/16.png</file>
+        <file>Res/5linked.jpg</file>
+        <file>Res/List.jpg</file>
+        <file>Res/List.obj</file>
+        <file>Res/View.jpg</file>
+        <file>Res/View.obj</file>
+        <file>Res/potolok.jpg</file>
+        <file>Res/potolok.obj</file>
     </qresource>
 </RCC>

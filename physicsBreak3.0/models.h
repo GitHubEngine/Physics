@@ -37,7 +37,7 @@ public:
 class Model1 : public virtual Model, QObject
 {
 private:
-    double A0, beta, omega0,omega, angle, t, r, c, k, m, R, J, A;
+    double A0, beta, omega0,omega, angle, t, r, c, k, m, R, J, A, Ek, Ep, E;
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *i3, *i4, *k1, *k2, *k3, *k4, *k5, *k6;
@@ -54,12 +54,15 @@ public:
     void Update(double);
     void CreatePlot(int);
     double GetA();
+    double GetE();
+    double GetEp();
+    double GetEk();
     double GetBeta();
     double GetOmega();
     double GetAngle();
     double GetTime();
-    double GetEp(){return 0.5*(k * pow(A*cos(omega0 * t),2.));}
-    double GetEk(){return 0.5*(J * pow(A * (-beta * cos(omega0 * t) - omega0 * sin(omega0 * t)), 2));}
+    //double GetEp(){return 0.5*(k * pow(A*cos(omega0 * t),2.));}
+    //double GetEk(){return 0.5*(J * pow(A * (-beta * cos(omega0 * t) - omega0 * sin(omega0 * t)), 2));}
     void GetMenu(QMenu *);
     Qt3DCore::QEntity *GetEntity();
     QVBoxLayout *GetSet();
@@ -281,10 +284,32 @@ private:
     QCheckBox *cGraf;
     QSlider *sGraf;
 
-    double dtheta0, Theta0, m_st0, m_d0, l_st0, r1_0, r2_0;
+    double m_st0 = 0.4; //масса стержня
+    double m_d0 = 1; //масса диска
+    double r_d0 = 0.05; //радиус диска
+    double hight0 = 0.025; // высота диска
+    double l_st0 = 0.5; //длина стержня
+    double r1_0 = 0.1; //расстояние от оси вращения до диска, который перемещается
+    double r2_0 = 0.35; //расстояние от оси вращения до неподвижного диска
 
-    double dtheta, Theta, m_st, m_d, m, l_st, r1, r2, d, I, C, Ist, Id1, Id2;
-    double K[4],L[4];
+    double m_st;
+    double m_d;
+    double r_d; // радиус диска
+    double hight;//высота диска
+    double m;
+    double l_st;
+    double r1;
+    double r2;
+    double d;
+    double I;
+    double C;
+    double Ist;
+    double Id1;
+    double Id2;
+    std::vector <double> start;
+    std::vector <double> fun(double t, std::vector <double> y0);
+    double error(std::vector <double> yh, std::vector <double> y2h);
+    std::vector <double> Runge (double h, std::vector <double>  y0, double t);
 public:
     Model6();
     void Init();
@@ -296,6 +321,7 @@ public:
     QVBoxLayout *GetInf() {return inf; }
     void GetMenu(QMenu *) {return;}
     QString GetName() {return "Колебания оборотного маятника";}
+    std::vector <double> step(double &h, std::vector <double> ystart, double eps, double h0);
     ~Model6(){}
     void lock(bool){}
 };

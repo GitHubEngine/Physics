@@ -233,7 +233,7 @@
                 <string>Колебания связанных физических маятников</string>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/5.jpg);</string>
+                <string notr="true">background-image: url(:/Res/5linked.jpg);</string>
                </property>
               </widget>
              </item>

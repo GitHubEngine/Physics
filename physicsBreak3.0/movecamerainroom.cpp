@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-const float coordR[]={15.0, 8.0, 5.5, 0.0, -2.0, -8.0, -10.0};
-const bool sideR[]={true, false, true, false, true, false, true};
+const float coordR[]={18.5, 15.0, 8.0, 5.5, 0.0, -2.0, -8.0, -10.0};
+const bool sideR[]={false, true, false, true, false, true, false, true};
 float st, kx, kz;
 int steps = 0;
 

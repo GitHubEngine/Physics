@@ -17,12 +17,12 @@ Model7::Model7()
 
     {
         QLabel *k = new QLabel(QString("Начальный угол отклонения: %1 град").arg(A0 * toGrad));
-        s1 = new QSlider(Qt::Horizontal); s1->setMinimum(-150); s1->setMaximum(0); s1->setValue(int(A0 * toGrad));
+        s1 = new QSlider(Qt::Horizontal); s1->setMinimum(-300); s1->setMaximum(0); s1->setValue(int(A0 * toGrad * 10));
         connect(s1, &QSlider::valueChanged, [=]()
         {
         A0 = double(s1->value()) * 0.1 / toGrad;
         angle = A0;
-        k->setText(QString("Начальный угол отклонения: %1 рад").arg(A0));
+        k->setText(QString("Начальный угол отклонения: %1 град").arg(A0 * toGrad));
         Transform();
         });
         set->addWidget(k);
@@ -110,7 +110,9 @@ void Model7::Transform()
 void Model7::LoadModel()
 {
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
-    addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
+    addObject(ent, ":/Res/potolok.obj", ":/Res/potolok.jpg");
+    addObject(ent, ":/Res/View.obj", ":/Res/View.jpg");
+    //addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
 
     addObject(ent, ":/Stands/Math7/base2.obj", ":/Stands/Math7/metal.jpg");
@@ -143,10 +145,11 @@ void Model7::LoadModel()
 
 void Model7::Init()
 {
+    double PI = 3.1415;
     t = 0.;
     W = sqrt(g / l);
-    T_left = 2 * M_PI * sqrt(l / g);           //периоды при движении после столкновения
-    T_right = 2 * M_PI * sqrt(h / g);
+    T_left = 2 * PI * sqrt(l / g);           //периоды при движении после столкновения
+    T_right = 2 * PI * sqrt(h / g);
 
     t1 = 0;
     t2 = T_right / 4;

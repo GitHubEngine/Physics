@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     camera = sceneWindow->camera();
     camera->lens()->setPerspectiveProjection(100.0f, 16.0f/9.0f, 0.1f, 1000.0f);
-    camera->setPosition(QVector3D(20.0, 3.0, 0.0));
+    camera->setPosition(QVector3D(22.0, 3.0, 0.0));
     camera->setUpVector(QVector3D(0, 1, 0));
     camera->setViewCenter(QVector3D(19.0, 3.0, 0.0));
 
@@ -317,7 +317,7 @@ void MainWindow::on_pushButton_clicked()
     {
         sceneWindow->setRootEntity(sceneEntity);
         camera->setFieldOfView(100.0f);
-        camera->setPosition(QVector3D(20.0, 3.0, 0.0));
+        camera->setPosition(QVector3D(22.0, 3.0, 0.0));
         camera->setViewCenter(QVector3D(19.0, 3.0, 0.0));
         m->~Model();
         curC = -1;
@@ -365,3 +365,9 @@ void MainWindow::on_startBut_clicked()
     }
 }
 
+
+void MainWindow::on_room8_clicked()
+{
+    curC = 7;
+    cameraMoveTo();
+}

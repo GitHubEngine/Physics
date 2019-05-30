@@ -19,7 +19,8 @@ Model4::Model4()
 
     // init laboratry
     addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
-    addObject(root, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
+    addObject(root, ":/Res/potolok.obj", ":/Res/potolok.jpg");
+    addObject(root, ":/Res/View.obj", ":/Res/View.jpg");
     QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
     nam->setWordWrap(true);
     opt->addWidget(nam);

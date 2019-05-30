@@ -58,6 +58,8 @@ private slots:
 
     void on_startBut_clicked();
 
+    void on_room8_clicked();
+
 private:
     Ui::MainWindow *ui;
     QWidget *scene;

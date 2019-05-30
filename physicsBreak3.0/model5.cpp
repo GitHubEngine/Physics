@@ -158,7 +158,9 @@ void Model5::Transform()
 void Model5::LoadModel()
 {
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
-    addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
+    addObject(ent, ":/Res/potolok.obj", ":/Res/potolok.jpg");
+    addObject(ent, ":/Res/View.obj", ":/Res/View.jpg");
+    addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
 
     addObject(ent, ":/Stands/Math5/ospol.obj", ":/Stands/Math5/wood.jpg");

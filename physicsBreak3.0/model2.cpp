@@ -264,8 +264,10 @@ void Model2::Transform()
 void Model2::LoadModel()
 {
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
+    addObject(ent, ":/Res/potolok.obj", ":/Res/potolok.jpg");
+    addObject(ent, ":/Res/View.obj", ":/Res/View.jpg");
+    addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
-    addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 
     Qt3DCore::QEntity *box = addObject(ent, ":/Stands/Math2/box.obj", ":/Stands/Math2/boxMat.png");
     Qt3DCore::QEntity *axis = addObject(ent, ":/Stands/Math2/axis.obj", ":/Stands/Math2/axisMat.png");

@@ -39,8 +39,11 @@ Model1::Model1()
 
 
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
+    addObject(ent, ":/Res/potolok.obj", ":/Res/potolok.jpg");
+    addObject(ent, ":/Res/View.obj", ":/Res/View.jpg");
+    addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
-    addObject(ent, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
+
 
     addObject(ent, ":/Stands/Math1/base.obj", ":/Stands/Math1/full.png");
     Qt3DCore::QEntity *obj1 = addObject(ent, ":/Stands/Math1/palka.obj", ":/Stands/Math1/palka.jpg");
@@ -148,7 +151,7 @@ Model1::Model1()
 void Model1::Init()
 {
     t = 0.;
-    A = A0 * exp(-beta * t);
+
     J = 2*(2*m*R*R/5 + m*r*r);
     omega0 = sqrt(k/J);
     beta = c/(4*sqrt(m*k)*J);
@@ -180,19 +183,23 @@ void Model1::Update_plot(double dt, int maxtime)
 
 void Model1::Compute()
 {
+    A = A0 * exp(-beta * t);
     angle = A * cos(omega * t);
+    Ek = J * A0 * A0* pow(e, -2 * beta * t) * (beta * cos(omega*t)+ omega * sin(omega * t))*(beta * cos(omega*t)+ omega * sin(omega * t))/2;
+    Ep = k*A0*A0*pow(e, -2 * beta * t) * cos(omega * t) * cos(omega * t)/2;
+    E = Ek+Ep;
 }
 
 void Model1::Transform()
 {
-   tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * toGrad)));
+    tr1->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), float(angle * toGrad)));
 
-   QMatrix4x4 m1 = tr2->rotateAround(QVector3D(0.f, 0.f, 0.f), float(angle * toGrad), QVector3D(0.0, 1.0, 0.0));
-   QMatrix4x4 m2 = m1;
-   m1.translate(float(-(0.2 + 1.3 * r)), 1.08089f, 0.f);
-   m2.translate(float(0.2 + 1.3 * r), 1.08089f, 0.f);
-   tr2->setMatrix(m1);
-   tr3->setMatrix(m2);
+    QMatrix4x4 m1 = tr2->rotateAround(QVector3D(0.f, 0.f, 0.f), float(angle * toGrad), QVector3D(0.0, 1.0, 0.0));
+    QMatrix4x4 m2 = m1;
+    m1.translate(float(-(0.2 + 1.3 * r)), 1.08089f, 0.f);
+    m2.translate(float(0.2 + 1.3 * r), 1.08089f, 0.f);
+    tr2->setMatrix(m1);
+    tr3->setMatrix(m2);
 }
 
 void Model1::Update(double dt)
@@ -209,6 +216,8 @@ void Model1::Update(double dt)
                 plot->Destroy();
                 plots.removeOne(plot);
             }
+
+
 
 
     i1->setText(QString("Угол отклонения: %1 град").arg(angle * toGrad, 0, 'f', 2));
@@ -229,11 +238,12 @@ void Model1::CreatePlot(int plotID)
     break;
     case 1:
         plot = new Plot([this]()->double{ return this->GetTime(); },
-                        [this]()->double{ return this->GetEk(); }, "Кинетическая энергия, Дж", abs(GetEk() + GetEp()));
+                        [this]()->double{ return this->GetEp(); }, "Потенциальная энергия, Дж", abs(GetEk() + GetEp()));
+
     break;
     case 2:
         plot = new Plot([this]()->double{ return this->GetTime(); },
-                        [this]()->double{ return this->GetEp(); }, "Потенциальная энергия, Дж", abs(GetEk() + GetEp()));
+                        [this]()->double{ return this->GetEk(); }, "Кинетическая энергия, Дж", abs(GetEk() + GetEp()));
     break;
     case 3:
         plot = new Plot([this]()->double{ return this->GetTime(); },
@@ -256,6 +266,21 @@ Qt3DCore::QEntity *Model1::GetEntity()
 double Model1::GetA()
 {
     return A0;
+}
+
+double Model1::GetEk()
+{
+    return Ek;
+}
+
+double Model1::GetEp()
+{
+    return Ep;
+}
+
+double Model1::GetE()
+{
+    return E;
 }
 
 double Model1::GetBeta()
@@ -335,4 +360,3 @@ void Model1::GetMenu(QMenu *m)
     });
 
 }
-
