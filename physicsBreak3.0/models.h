@@ -309,11 +309,9 @@ private:
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *k1;
-    QSlider *s1;
+    QSlider *s1, *s2, *s3;
     Qt3DCore::QTransform *tr1, *g1, *g2, *gq;
     QList<Plot *> plots;
-    QCheckBox *cGraf;
-    QSlider *sGraf;
     const double l = 1.0;
     double scr = 0;
 
@@ -322,8 +320,8 @@ private:
     double A0, h, m, t;
     double angle, W, W1, k, velocity, Ek, Ep, E, t1, t2, T_left, T_right;
 
+
     void Compute_left();
-    void Compute_left1();
     void Compute_right();
 public:
     Model7();
@@ -337,7 +335,7 @@ public:
     void GetMenu(QMenu *) {return;}
     QString GetName() {return "Колебания маятника Галилея";}
     ~Model7(){}
-    void lock(bool){}
+    void lock(bool);
 };
 
 class Model8 : public virtual Model, QObject

@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     timer = new QTimer();
-    timer->setInterval(dt);
+    timer->setInterval(dtG);
     connect(timer, SIGNAL(timeout()), this, SLOT(Update()));
 
     hwind = new help();
@@ -171,7 +171,6 @@ void MainWindow::mouseWheel(QWheelEvent *ev)
 void MainWindow::CreateEntity()
 {
     addObject(sceneEntity, ":/Res/Corridor.obj", ":/Res/Corridor.png");
-    addObject(sceneEntity, ":/Res/ceiling.obj", ":/Res/ceiling.jpg");
 }
 
 void MainWindow::Update()

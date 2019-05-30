@@ -76,63 +76,32 @@
              </size>
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="2" column="4">
-              <widget class="QPushButton" name="room6">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/6.jpg);</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QPushButton" name="room1">
                <property name="minimumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
+               <property name="contextMenuPolicy">
+                <enum>Qt::NoContextMenu</enum>
+               </property>
+               <property name="toolTip">
+                <string>Колебания торсионного маятника</string>
+               </property>
                <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/1.jpg);</string>
+                <string notr="true">background-image: url(:/Res/1tors.jpg)
+</string>
                </property>
                <property name="autoDefault">
                 <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QPushButton" name="room5">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/5.jpg);</string>
                </property>
               </widget>
              </item>
@@ -140,18 +109,21 @@
               <widget class="QPushButton" name="room2">
                <property name="minimumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Моделирование прецессии и нутации гироскопа</string>
+               </property>
                <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/2.jpg);</string>
+                <string notr="true">background-image: url(:/Res/2giros.jpg)</string>
                </property>
               </widget>
              </item>
@@ -159,37 +131,21 @@
               <widget class="QPushButton" name="room4">
                <property name="minimumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Измерение скорости пули с помощью баллистического маятника</string>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/4.jpg);</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QPushButton" name="room7">
-               <property name="minimumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>93</width>
-                 <height>130</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/7.jpg);</string>
+                <string notr="true">background-image: url(:/Res/4ballist.jpg);</string>
                </property>
               </widget>
              </item>
@@ -197,18 +153,109 @@
               <widget class="QPushButton" name="room3">
                <property name="minimumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>93</width>
+                 <width>95</width>
                  <height>130</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Колебания жесткого математического маятника с большими амплитудами</string>
+               </property>
                <property name="styleSheet">
-                <string notr="true">background-image: url(:/Res/3.jpg);</string>
+                <string notr="true">background-image: url(:/Res/3mat.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="4">
+              <widget class="QPushButton" name="room8">
+               <property name="minimumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Колебания электростатического маятника</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/8electro.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="room7">
+               <property name="minimumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Колебания маятника Галилея </string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/7galiley.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="4">
+              <widget class="QPushButton" name="room5">
+               <property name="minimumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Колебания связанных физических маятников</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/5.jpg);</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="room6">
+               <property name="minimumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>95</width>
+                 <height>130</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Колебания оборотного маятника</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-image: url(:/Res/6oborot.jpg);</string>
                </property>
               </widget>
              </item>

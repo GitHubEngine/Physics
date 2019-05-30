@@ -72,7 +72,7 @@ private:
 
 
     const double PI = 2 * asin(1.);
-    const double dt = 15;
+    const double dtG = 15;
     int mouse_x, mouse_y;
     double alpha = 0.0, beta = 0.0, expand = 1.0;
     clock_t time, stime;

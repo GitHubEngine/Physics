@@ -54,9 +54,9 @@ QVBoxLayout *sRect2 ()
     addImage(Lay, ":/Sup/Math2/7.PNG");
     addImage(Lay, ":/Sup/Math2/8.PNG");
 
+
     return Lay;
 }
-
 
 QVBoxLayout *sRect3 ()
 {

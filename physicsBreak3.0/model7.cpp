@@ -12,77 +12,56 @@ Model7::Model7()
     set =  new QVBoxLayout();
     LoadModel();
 
-    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
-    nam->setWordWrap(true);
-    set->addWidget(nam);
-
-
-    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
-    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
-    cGraf = new QCheckBox("Моментальное построение графиков");
-    connect(sGraf, &QSlider::valueChanged, [=](int d){
-        lGraf->setText(QString("Количество значений: %1").arg(d));
-    });
-    cGraf->setCheckState(Qt::Checked);
-    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
-        if (k == 0)
-            sGraf->setEnabled(false);
-        else
-            sGraf->setEnabled(true);
-    });
-    inf->addWidget(cGraf);
-    inf->addWidget(lGraf);
-    inf->addWidget(sGraf);
-
     tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
 
 
     {
         QLabel *k = new QLabel(QString("Начальный угол отклонения: %1 град").arg(A0 * toGrad));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(-3000); s->setMaximum(3000); s->setValue(int(A0 * 100. * toGrad));
-        connect(s, &QSlider::valueChanged, [=]()
+        s1 = new QSlider(Qt::Horizontal); s1->setMinimum(-150); s1->setMaximum(0); s1->setValue(int(A0 * toGrad));
+        connect(s1, &QSlider::valueChanged, [=]()
         {
-        A0 = double(s->value()) / (100 * toGrad);
+        A0 = double(s1->value()) * 0.1 / toGrad;
         angle = A0;
-        k->setText(QString("Начальный угол отклонения: %1 град").arg(A0 * toGrad));
+        k->setText(QString("Начальный угол отклонения: %1 рад").arg(A0));
         Transform();
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s1);
     }
     {
-        QLabel *k = new QLabel(QString("Высота планки: %1 м").arg(h));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(20); s->setMaximum(80); s->setValue(int(h * 100.));
-        connect(s, &QSlider::valueChanged, [=]()
+        QLabel *k = new QLabel(QString("Высота планки с препятствием: %1 м").arg(h));
+        s2 = new QSlider(Qt::Horizontal); s2->setMinimum(20); s2->setMaximum(90); s2->setValue(int(h * 100.));
+        connect(s2, &QSlider::valueChanged, [=]()
         {
-        h = double(s->value()) * 0.01;
+        h = double(s2->value()) * 0.01;
         k->setText(QString("Высота планки: %1 м").arg(h));
         tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
         Transform();
 
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s2);
     }
     {
         QLabel *k = new QLabel(QString("Масса груза: %1 кг").arg(m));
-        QSlider *s = new QSlider(Qt::Horizontal); s->setMinimum(50); s->setMaximum(1000); s->setValue(int(m * 100.));
-        connect(s, &QSlider::valueChanged, [=]()
+        s3 = new QSlider(Qt::Horizontal); s3->setMinimum(50); s3->setMaximum(1000); s3->setValue(int(m * 100.));
+        connect(s3, &QSlider::valueChanged, [=]()
         {
-        m = double(s->value()) * 0.01;
+        m = double(s3->value()) * 0.01;
         k->setText(QString("Масса груза: %1 кг").arg(m));
         });
         set->addWidget(k);
-        set->addWidget(s);
+        set->addWidget(s3);
     }
 
 }
 
 void Model7::Compute_left()
 {
-    angle = A0 * cos(W * t);
+    angle = A0 * cos(W * t1);
 
-    velocity = -A0 * l * W * sin(W * t);
+
+    velocity = -A0 * l * W * sin(W * t1);
     Ek = m * pow(velocity, 2) / 2;
     Ep = m * g * l * (1 - cos(angle));
     E = Ek + Ep;
@@ -93,9 +72,9 @@ void Model7::Compute_right()
 {
     k = l / h;
     W1 = sqrt(g * k / l);
-    angle = A0 * sqrt(k) * cos(W1 * t);
+    angle = A0 * sqrt(k) * cos(W1 * t2);
 
-    velocity = -A0 * sqrt(k) * h * W1 * sin(W1 * t);
+    velocity = -A0 * sqrt(k) * h * W1 * sin(W1 * t2);
     Ek = m * pow(velocity, 2) / 2;
     Ep = m * g * h * (1 - cos(angle));
     E = Ek + Ep;
@@ -105,52 +84,26 @@ void Model7::Compute_right()
 void Model7::Transform()
 {
 
-    if (angle <= 0)
+    if (angle < 0)
     {
         g1->setScale3D(QVector3D(1., 2. + 0.03, 1.));
         g1->setRotationX(angle * toGrad);
         g2->setScale(0.);
-        //g2->setRotationX(angle * toGrad);
-        //g2->setTranslation(QVector3D(0., 1.443 * (1. + 1.5 * (h - 0.51)), 0.));
 
         gq->setRotationX(angle * toGrad);
 
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.0));
     }
     else
     {
         g1->setRotationX(0.);
         g1->setScale3D(QVector3D(1., 1. - 2.225 * (h - 0.51), 1.));
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));
-        QMatrix4x4 matrix = g2->rotateAround(QVector3D(0., 0.7215 + (h - 0.51) * 1.4 + 0.0935, 0.), angle * toGrad * sqrt(l / h), QVector3D(1., 0., 0.));
+        QMatrix4x4 matrix = g2->rotateAround(QVector3D(0., 0.7215 + (h - 0.51) * 1.4 + 0.0935, 0.), angle * toGrad , QVector3D(1., 0., 0.));
         matrix.translate(0., 1.443, 0.);
         gq->setMatrix(matrix);
         matrix.translate(0., -1.443, 0.);
         matrix.scale(1., 1. + 2.225 * (h - 0.51), 1.);
         matrix.translate(0., 1.443 * (1. - 0.1384 * (pow(h, -1.168)) * (h - 0.51)), 0.);
         g2->setMatrix(matrix);
-
-
-
-
-
-
-        /*auto matrix = g2->matrix();
-        matrix.setToIdentity();
-        //matrix.translate(QVector3D(0., 1.443 * 0.564796 , 0.));
-
-        matrix.translate(QVector3D(0., 0.815, 0.));
-        matrix.rotate(angle * toGrad, QVector3D(1., 0., 0.));
-        matrix.translate(QVector3D(0., 0.628, 0.));
-        //matrix.translate(QVector3D(0., 1.443 * 0.435204, 0.));
-        g2->setMatrix(matrix);
-        g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));
-        //g2->setTranslation(QVector3D(0., 1.443 * (1. + 1.94 * (h - 0.51)), 0.));
-        gq->setMatrix(matrix);
-        //g2->setMatrix(g2->rotateAround(QVector3D(0., -9., 0.), angle * toGrad, QVector3D(1., 0., 0.)));
-        //g2->rot
-        //g2->setTranslation(QVector3D(0., 1.443, 0.));
-        //g2->setScale3D(QVector3D(1., 1. + 2.225 * (h - 0.51), 1.));*/
     }
 }
 
@@ -194,37 +147,35 @@ void Model7::Init()
     W = sqrt(g / l);
     T_left = 2 * M_PI * sqrt(l / g);           //периоды при движении после столкновения
     T_right = 2 * M_PI * sqrt(h / g);
-    t1 = T_right / 4;
-    t2 = 3 * T_left / 4;
+
+    t1 = 0;
+    t2 = T_right / 4;
 }
 
 void Model7::Compute(double dt)
 {
     t += dt;
-        if (angle < 1)
+        if (t1 < T_left / 4 || (t1 >= 3 * T_left / 4 && t1 < T_left) )
         {
              Compute_left();
+             t1 += dt;
+             if(t1 >= T_left)
+             {
+                 t1 = 0;
+             }
+             if(t1 >= T_left / 4)
+             {
+                 t2 = T_right / 4;
+             }
         }
         else
         {
-            if (t1 < 3 * T_right / 4)
-            {
-                Compute_right();
-                t1 += dt;
-            }
-            else
-            {
-                if (t2 < T_left)
-                {
-                    Compute_left();
-                    t2 += dt;
-                }
-                else
-                {
-                    t1 = T_right / 4;
-                    t2 = 3 * T_left / 4;
-                }
-            }
+             Compute_right();
+             t2 += dt;
+             if(t2 >= 3 * T_right / 4)
+             {
+                 t1 = 3 * T_left / 4;
+             }
         }
 }
 
@@ -237,4 +188,12 @@ void Model7::Update(double dt)
 void Model7::CreatePlot(int)
 {
 
+}
+
+
+void Model7::lock(bool f)
+{
+    s1->setEnabled(!f);
+    s2->setEnabled(!f);
+    s3->setEnabled(!f);
 }
