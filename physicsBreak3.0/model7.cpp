@@ -12,6 +12,23 @@ Model7::Model7()
     set =  new QVBoxLayout();
     LoadModel();
 
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментальное построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количество значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
     tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
 
 
@@ -112,7 +129,7 @@ void Model7::LoadModel()
     addObject(ent, ":/Res/Room.obj", ":/Res/Room.png");
     addObject(ent, ":/Res/potolok.obj", ":/Res/potolok.jpg");
     addObject(ent, ":/Res/View.obj", ":/Res/View.jpg");
-    //addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
+    addObject(ent, ":/Res/List.obj", ":/Res/List.jpg");
     addObject(ent, ":/Res/tablemetal.obj", ":/Res/tablemetal.png");
 
     addObject(ent, ":/Stands/Math7/base2.obj", ":/Stands/Math7/metal.jpg");
@@ -188,9 +205,104 @@ void Model7::Update(double dt)
     Transform();
 }
 
-void Model7::CreatePlot(int)
+void Model7::CreatePlot(int plotID)
 {
+    Plot *plot = nullptr;
+    double YSize;
+    double st = t;
+    Init();
+    switch (plotID)
+    {
+    case 0:{
+    YSize= 2.;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return this->velocity; }, "График линейной скорости, м/c",abs(YSize));
 
+    break;}
+    case 1:{
+    YSize= Ek + Ep;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return this->Ek; }, "График кинетической энергии, Дж",abs(YSize));
+
+    break;}
+    case 2:{
+    YSize= Ek + Ep;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return this->Ep; }, "График потенциальной энергии, Дж",abs(YSize));
+
+    break;}
+    case 3:{
+    YSize= Ek + Ep;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return Ek+Ep; }, "График полной энергии, Дж",abs(YSize));
+
+    break;}
+    }
+    t = st;
+    if (plot)
+    {
+        plot->show();
+        plots.append(plot);
+    }
+}
+
+void Model7::GetMenu(QMenu *m)
+{
+    QMenu *a1 = new QMenu("Графики энергии", m);
+    QAction *a1_1 = new QAction("Кинетическая энергия", a1);
+    QAction *a1_2 = new QAction("Потенциальная энергия", a1);
+    QAction *a1_3 = new QAction("Полная энергия", a1);
+
+    m->addMenu(a1);
+    a1->addAction(a1_1);
+    a1->addAction(a1_2);
+    a1->addAction(a1_3);
+
+    QAction *a2 = new QAction("Графики линейной скорости", m);
+
+    m->addAction(a2);
+
+
+    connect(a1_1, &QAction::triggered, [=](){
+        this->CreatePlot(1);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_2, &QAction::triggered, [=](){
+        this->CreatePlot(2);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a1_3, &QAction::triggered, [=](){
+        this->CreatePlot(3);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2, &QAction::triggered, [=](){
+        this->CreatePlot(0);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+}
+
+void Model7::Update_plot(double dt, int maxtime)
+{
+    double st = t;
+    double st1 = t1;
+    double st2 = t2;
+    Init();
+    for (int i=0;i<maxtime;i++){
+        for (int j=0;j<timesPrint;++j)
+        {
+            t += dt;
+            Compute(dt);
+        }
+        for (auto plot : plots)
+            plot->Update();
+    }
+    t = st;
+    t1 = st1;
+    t2 = st2;
 }
 
 

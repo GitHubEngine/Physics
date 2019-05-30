@@ -28,6 +28,10 @@ Model6::Model6()
     inf->addWidget(lGraf);
     inf->addWidget(sGraf);
 
+    i1 = new QLabel(QString("Угол октлонения %1 рад").arg(0));
+    i2 = new QLabel(QString("Угловая скорость %1 рад/с").arg(0));
+    inf->addWidget(i1);
+    inf->addWidget(i2);
     set->addWidget(nam);
     set->addWidget(new QLabel(QString("Масса стрежня: %1 кг").arg(m_st0)));
     set->addWidget(new QLabel(QString("Длинна стержня: %1 м").arg(l_st0)));
@@ -35,7 +39,7 @@ Model6::Model6()
     a1->setWordWrap(true);
     set->addWidget(a1);
 
-    start.push_back(0.78);
+    start.push_back(PI / 4);
     start.push_back(0);
 
     {
@@ -53,7 +57,7 @@ Model6::Model6()
 
     {
         QLabel *k = new QLabel(QString("Начальная угловая скорость: %1 град/c").arg(start[1] * toGrad));
-        s2 = new QSlider(Qt::Horizontal); s2->setMinimum(-450); s2->setMaximum(450); s2->setValue(int(start[1] * toGrad * 10));
+        s2 = new QSlider(Qt::Horizontal); s2->setMinimum(-3600); s2->setMaximum(3600); s2->setValue(int(start[1] * toGrad * 10));
         connect(s2, &QSlider::valueChanged, [=]()
         {
         start[1] = double(s2->value()) / (10 * toGrad);
@@ -194,6 +198,11 @@ void Model6::Init()
     Id2 = 0.25*m_d*r_d*r_d + m_d * hight*hight / 12 + m_d * r2*r2;
     I = Ist + Id1 + Id2; //маятника
     C = -m * g*d/I; //просто константа для удобства
+    start[0] = double(s1->value()) / (10 * toGrad);
+    start[1] = double(s2->value()) / (10 * toGrad);
+    t = 0;
+    ih = 0;
+    dh = 0.001;
 }
 
 
@@ -201,25 +210,89 @@ void Model6::Init()
 
 void Model6::Compute(double h)
 {
-    start = step(h, start, 1e-4, h);
+    ++t;
+    start = step(dh, start, 1e-4, h);
 }
 
 void Model6::Update(double h)
 {
     Compute(h);
     Transform();
+    i1->setText(QString("Угол октлонения %1 рад").arg(start[0]));
+    i2->setText(QString("Угловая скорость %1 рад/с").arg(start[1]));
 }
 
-void Model6::CreatePlot(int)
+void Model6::CreatePlot(int plotID)
 {
+    Plot *plot = nullptr;
+    double YSize;
+    double a = start[0], w = start[1];
+    Init();
+    switch (plotID)
+    {
+    case 0:{
+    YSize= PI;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return this->start[0]; }, "График углового отклонения",abs(YSize));
 
+    break;}
+    case 1:{
+    YSize= PI;
+    plot = new Plot([this]()->double{ return this->t; },
+                        [this]()->double{ return this->start[1]; }, "График угловой скорости, рад/c",abs(YSize));
+
+    break;}
+    }
+    start[0] = a;
+    start[1] = w;
+    if (plot)
+    {
+        plot->show();
+        plots.append(plot);
+    }
 }
 
-std::vector<double> Model6::step(double &h, std::vector<double> ystart, double eps, double h0)
+void Model6::GetMenu(QMenu *m)
 {
-    static int i = 0;
-    double tstart = h * i;
-    ++i;
+
+
+    QAction *a1 = new QAction("Графики отклонения", m);
+    QAction *a2 = new QAction("Графики скорости", m);
+
+    m->addAction(a1);
+    m->addAction(a2);
+    connect(a1, &QAction::triggered, [=](){
+        this->CreatePlot(0);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+    connect(a2, &QAction::triggered, [=](){
+        this->CreatePlot(1);
+        if (cGraf->checkState())
+            this->Update_plot(0.001,sGraf->value());
+    });
+}
+
+void Model6::Update_plot(double dt, int maxtime)
+{
+    double a = start[0], w = start[1];
+    Init();
+    for (int i=0;i<maxtime;i++){
+        for (int j=0;j<timesPrint;++j)
+        {
+            Compute(dt);
+        }
+        for (auto plot : plots)
+            plot->Update();
+    }
+    start[0] = a;
+    start[1] = w;
+}
+
+std::vector<double> Model6::step(double &h, std::vector<double> ystart,double eps, double h0)
+{
+    double tstart = h0 * ih;
+    ++ih;
     std::vector <double> yh = ystart;
     std::vector <double> y2h;
     y2h.assign(ystart.size(), -100);

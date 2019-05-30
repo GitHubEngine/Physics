@@ -44,7 +44,7 @@ Model5::Model5()
     inf->addWidget(lGraf);
     inf->addWidget(sGraf);
 
-    i1 = new QLabel(QString("Угол откл. певрого маятника: %1 град").arg(angle1 * toGrad));
+    i1 = new QLabel(QString("Угол откл. первого маятника: %1 град").arg(angle1 * toGrad));
     i2 = new QLabel(QString("Угол откл. второго маятника: %1 град").arg(angle2 * toGrad));
     i3 = new QLabel(QString("Энергия первого маятника: %1 Дж").arg(E1));
     i4 = new QLabel(QString("Энергия второго маятника: %1 Дж").arg(E2));
@@ -136,9 +136,6 @@ Model5::Model5()
         set->addWidget(l);
         set->addWidget(s4);
     }
-
-
-
 }
 
 
@@ -285,7 +282,7 @@ void Model5::Update(double dt)
 
     if (int (t * 100) % 10 == 0)
     {
-        i1->setText(QString("Угол отклонения певрого маятника: %1 град").arg(angle1 * toGrad, 0, 'f', 2));
+        i1->setText(QString("Угол отклонения первого маятника: %1 град").arg(angle1 * toGrad, 0, 'f', 2));
         i2->setText(QString("Угол отклонения второго маятника: %1 град").arg(angle2 * toGrad, 0, 'f', 2));
         i3->setText(QString("Энергия первого маятника: %1 Дж").arg(E1, 0, 'e', 5));
         i4->setText(QString("Энергия второго маятника: %1 Дж").arg(E2, 0, 'e', 5));

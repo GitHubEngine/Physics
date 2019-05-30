@@ -291,7 +291,7 @@ private:
     double l_st0 = 0.5; //длина стержня
     double r1_0 = 0.1; //расстояние от оси вращения до диска, который перемещается
     double r2_0 = 0.35; //расстояние от оси вращения до неподвижного диска
-
+    double t;
     double m_st;
     double m_d;
     double r_d; // радиус диска
@@ -306,6 +306,8 @@ private:
     double Ist;
     double Id1;
     double Id2;
+    double dh;
+    int ih;
     std::vector <double> start;
     std::vector <double> fun(double t, std::vector <double> y0);
     double error(std::vector <double> yh, std::vector <double> y2h);
@@ -319,7 +321,8 @@ public:
     Qt3DCore::QEntity *GetEntity(){return ent; }
     QVBoxLayout *GetSet(){return set; }
     QVBoxLayout *GetInf() {return inf; }
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
+    void Update_plot(double dt, int maxtime);
     QString GetName() {return "Колебания оборотного маятника";}
     std::vector <double> step(double &h, std::vector <double> ystart, double eps, double h0);
     ~Model6(){}
@@ -335,6 +338,8 @@ private:
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *k1;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
     QSlider *s1, *s2, *s3;
     Qt3DCore::QTransform *tr1, *g1, *g2, *gq;
     QList<Plot *> plots;
@@ -358,7 +363,8 @@ public:
     Qt3DCore::QEntity *GetEntity(){return ent; }
     QVBoxLayout *GetSet(){return set; }
     QVBoxLayout *GetInf() {return inf; }
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
+    void Update_plot(double dt, int maxtime);
     QString GetName() {return "Колебания маятника Галилея";}
     ~Model7(){}
     void lock(bool);

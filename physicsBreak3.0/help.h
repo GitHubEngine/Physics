@@ -43,6 +43,7 @@ QVBoxLayout *sRect4();
 QVBoxLayout *sRect5();
 
 QVBoxLayout *sRect7();
+QVBoxLayout *sRect8();
 
 
 

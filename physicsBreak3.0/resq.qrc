@@ -147,5 +147,7 @@
         <file>Res/View.obj</file>
         <file>Res/potolok.jpg</file>
         <file>Res/potolok.obj</file>
+        <file>Sup/Math8/1.jpg</file>
+        <file>Sup/Math8/2.jpg</file>
     </qresource>
 </RCC>
