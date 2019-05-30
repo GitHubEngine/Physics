@@ -297,9 +297,9 @@ void Model2::LoadModel()
 void Model2::Update(double dt)
 {
 
-    double delt = double(t->elapsed()) * 1e-3/ 4.;
-    for (double i = 0; i * 1e-5 < delt; ++i)
-        Compute(1e-5);
+    double delt = double(t->elapsed()) * 1e-3;
+    for (int i = 0; i * 0.0001 < delt / 4; ++i)
+        Compute(0.0001);
     Transform();
     t->restart();
     if (!cGraf->checkState() && (int64_t(time * 1000) % timesPrint == 0))
