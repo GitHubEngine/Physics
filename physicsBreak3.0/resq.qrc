@@ -149,5 +149,15 @@
         <file>Res/potolok.obj</file>
         <file>Sup/Math8/1.jpg</file>
         <file>Sup/Math8/2.jpg</file>
+        <file>Sup/inst/gra.jpg</file>
+        <file>Sup/inst/inter.jpg</file>
+        <file>Sup/inst/inter2_1.jpg</file>
+        <file>Sup/inst/inter2_2.jpg</file>
+        <file>Sup/inst/inter2_3.jpg</file>
+        <file>Sup/inst/inter2_4.jpg</file>
+        <file>Sup/inst/menu_rooms.jpg</file>
+        <file>Sup/inst/menu_rooms2.jpg</file>
+        <file>Sup/inst/scene.jpg</file>
+        <file>Sup/inst/scene2.jpg</file>
     </qresource>
 </RCC>

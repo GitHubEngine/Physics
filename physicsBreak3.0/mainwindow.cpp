@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->action_3, &QAction::triggered, [=](){exit(0);});
     connect(ui->action, &QAction::triggered, [=](){hwind->updspr(0); hwind->show();});
+    connect(ui->action_2, &QAction::triggered, [=](){hwind->updspr(-1); hwind->show();});
 
     connect(ui->action_5, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 0; on_pushButton_clicked();});
     connect(ui->action_6, &QAction::triggered, [=](){if (curC == -2) on_pushButton_clicked(); curC = 1; on_pushButton_clicked();});

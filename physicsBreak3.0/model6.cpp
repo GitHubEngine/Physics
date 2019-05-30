@@ -28,8 +28,8 @@ Model6::Model6()
     inf->addWidget(lGraf);
     inf->addWidget(sGraf);
 
-    i1 = new QLabel(QString("Угол октлонения %1 рад").arg(0));
-    i2 = new QLabel(QString("Угловая скорость %1 рад/с").arg(0));
+    i1 = new QLabel(QString("Угол октлонения %1 град").arg(0));
+    i2 = new QLabel(QString("Угловая скорость %1 град/с").arg(0));
     inf->addWidget(i1);
     inf->addWidget(i2);
     set->addWidget(nam);
@@ -39,7 +39,7 @@ Model6::Model6()
     a1->setWordWrap(true);
     set->addWidget(a1);
 
-    start.push_back(PI / 4);
+    start.push_back(0.78);
     start.push_back(0);
 
     {
@@ -202,7 +202,7 @@ void Model6::Init()
     start[1] = double(s2->value()) / (10 * toGrad);
     t = 0;
     ih = 0;
-    dh = 0.001;
+    dh = 0.01;
 }
 
 
@@ -210,16 +210,31 @@ void Model6::Init()
 
 void Model6::Compute(double h)
 {
-    ++t;
-    start = step(dh, start, 1e-4, h);
+    start = step(dh, start, 1e-2, h);
+    qDebug() << ih * h + h << " " << start[0] * toGrad << " " << start[1];
+
 }
 
 void Model6::Update(double h)
 {
-    Compute(h);
-    Transform();
-    i1->setText(QString("Угол октлонения %1 рад").arg(start[0]));
-    i2->setText(QString("Угловая скорость %1 рад/с").arg(start[1]));
+    t+=h;
+    if (int64_t(t * 1000) % 10 == 0)
+    {
+        Compute(0.01);
+        Transform();
+        i1->setText(QString("Угол октлонения %1 град").arg(start[0] * toGrad));
+        i2->setText(QString("Угловая скорость %1 град/с").arg(start[1] * toGrad));
+
+        if (!cGraf->checkState())
+            for (auto plot : plots)
+                if (plot->GetState() == Plot::State::Active)
+                    plot->Update();
+                else
+                {
+                    plot->Destroy();
+                    plots.removeOne(plot);
+                }
+    }
 }
 
 void Model6::CreatePlot(int plotID)
@@ -280,7 +295,7 @@ void Model6::Update_plot(double dt, int maxtime)
     for (int i=0;i<maxtime;i++){
         for (int j=0;j<timesPrint;++j)
         {
-            Compute(dt);
+            Compute(0.01);
         }
         for (auto plot : plots)
             plot->Update();
@@ -297,7 +312,6 @@ std::vector<double> Model6::step(double &h, std::vector<double> ystart,double ep
     std::vector <double> y2h;
     y2h.assign(ystart.size(), -100);
     int n = h0 / h;
-
     while (error(yh, y2h) > eps)
     {
        auto y1 = ystart;

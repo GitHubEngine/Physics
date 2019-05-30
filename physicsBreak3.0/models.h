@@ -309,7 +309,7 @@ private:
     double dh;
     int ih;
     std::vector <double> start;
-    std::vector <double> fun(double t, std::vector <double> y0);
+    std::vector <double> fun(double, std::vector <double> y0);
     double error(std::vector <double> yh, std::vector <double> y2h);
     std::vector <double> Runge (double h, std::vector <double>  y0, double t);
 public:
@@ -374,32 +374,41 @@ class Model8 : public virtual Model, QObject
 {
 private:
 
-    void Transform();
+    void Transform(float);
     void LoadModel();
+    void Recalculate_pos();
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
-    QLabel *i1;
-    Qt3DCore::QTransform *tr1, *tr2, *gtr;
-    QList<Plot *> plots;
+    QLabel *i1,*w_lable,*an_lable;
+    Qt3DCore::QTransform *tr1, *tr2, *shar_t, *rope_t;
     QCheckBox *cGraf;
     QSlider *sGraf;
-
+    QList<Plot *> plots;
+    QSlider *s1,*s2,*s3,*s4;
+    double const e_0 = 8.85 * pow(10,-12);
+    float D_s,y1,y2;
+    int U,d,D,mark;
+    double angle, c_angle, q, m, E, w, L, t;
 
 public:
     Model8();
     void Init();
     void Compute(double);
+    void compute(double);
     void Update(double);
     void CreatePlot(int);
+    double GetTime();
+    double GetAngle();
+    double GetW();
+    void Update_plot(double dt, int maxtime);
     Qt3DCore::QEntity *GetEntity(){return ent; }
     QVBoxLayout *GetSet(){return set; }
     QVBoxLayout *GetInf() {return inf; }
-    void GetMenu(QMenu *) {return;}
+    void GetMenu(QMenu *);
     QString GetName() {return "Колебания электростатического маятника";}
     ~Model8(){}
     void lock(bool){}
 };
-
 
 
 #endif // MODELS_H

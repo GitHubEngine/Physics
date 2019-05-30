@@ -77,3 +77,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
         resq.qrc
+
+win32:RC_FILE = logo.rc

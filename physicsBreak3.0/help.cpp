@@ -19,6 +19,7 @@ void help::updspr(int c)
     QVBoxLayout *l;
     switch (c)
     {
+    case -1: l = sRect0(); break;
     case 0: l = sRect(); break;
     case 1: l = sRect1(); break;
     case 2: l = sRect2(); break;

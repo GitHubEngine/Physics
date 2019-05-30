@@ -203,6 +203,15 @@ void Model7::Update(double dt)
 {
     Compute(dt);
     Transform();
+    if (!cGraf->checkState() && (int64_t(t * 1000) % timesPrint == 0))
+        for (auto plot : plots)
+            if (plot->GetState() == Plot::State::Active)
+                plot->Update();
+            else
+            {
+                plot->Destroy();
+                plots.removeOne(plot);
+            }
 }
 
 void Model7::CreatePlot(int plotID)
