@@ -17,6 +17,24 @@ Model6::Model6()
     r2_0 = 4.8; //расстояние от оси вращения до неподвижного диска
     QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
     nam->setWordWrap(true);
+
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментальное построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количество значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
     set->addWidget(nam);
     set->addWidget(new QLabel(QString("Масса стрежня: %1 кг").arg(m_st0)));
     set->addWidget(new QLabel(QString("Длинна стержня: %1 м").arg(l_st0)));

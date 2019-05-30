@@ -47,6 +47,7 @@ Model2::Model2()
     i1 = new QLabel("Угол θ: 0.0 град");
     i2 = new QLabel("Угол φ: 0.0 град");
     inf->addWidget(i1);
+    inf->addWidget(i2);
 
     {
         QLabel *k = new QLabel(QString("Расстояние от стержня до диска: %1 м").arg(length));
@@ -282,10 +283,10 @@ void Model2::LoadModel()
     stand->addComponent(tr4);
 
 
-    tr1->setTranslation(QVector3D(0.0, 0.95, 0.0));
-    tr2->setTranslation(QVector3D(0.0, 0.95, 0.0));
-    tr3->setTranslation(QVector3D(0.0, 0.95, 0.0));
-    tr4->setTranslation(QVector3D(0.0, 0.95, 0.0));
+    tr1->setTranslation(QVector3D(0.0, 0.95f, 0.0));
+    tr2->setTranslation(QVector3D(0.0, 0.95f, 0.0));
+    tr3->setTranslation(QVector3D(0.0, 0.95f, 0.0));
+    tr4->setTranslation(QVector3D(0.0, 0.95f, 0.0));
 
     tr1->setScale(0.25);
     tr2->setScale(0.25);
@@ -296,7 +297,7 @@ void Model2::LoadModel()
 void Model2::Update(double dt)
 {
 
-    double delt = double(t->elapsed()) * 1e-3;
+    double delt = double(t->elapsed()) * 1e-3/ 4.;
     for (double i = 0; i * 1e-5 < delt; ++i)
         Compute(1e-5);
     Transform();
@@ -311,8 +312,8 @@ void Model2::Update(double dt)
                 plots.removeOne(plot);
             }
 
-    i1->setText(QString("Угол θ: %1 град/c").arg(this->GetTheta() * toGrad, 0, 'f', 2));
-    i2->setText(QString("Угол φ: %1 град/c").arg(this->GetPhi() * toGrad, 0, 'f', 2));
+    i1->setText(QString("Угол θ: %1 град").arg(this->GetTheta() * toGrad, 0, 'f', 2));
+    i2->setText(QString("Угол φ: %1 град").arg(this->GetPhi() * toGrad, 0, 'f', 2));
 }
 
 void Model2::CreatePlot(int plotID)

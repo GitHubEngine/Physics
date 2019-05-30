@@ -278,6 +278,8 @@ private:
     QSlider *s1, *s2, *s3, *s4, *s5;
     Qt3DCore::QTransform *tr1, *tr2;
     QList<Plot *> plots;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
 
     double dtheta0, Theta0, m_st0, m_d0, l_st0, r1_0, r2_0;
 
@@ -310,6 +312,8 @@ private:
     QSlider *s1;
     Qt3DCore::QTransform *tr1, *g1, *g2, *gq;
     QList<Plot *> plots;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
     const double l = 1.0;
     double scr = 0;
 
@@ -347,6 +351,8 @@ private:
     QLabel *i1;
     Qt3DCore::QTransform *tr1, *tr2, *gtr;
     QList<Plot *> plots;
+    QCheckBox *cGraf;
+    QSlider *sGraf;
 
 
 public:

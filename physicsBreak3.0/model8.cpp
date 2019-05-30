@@ -8,9 +8,28 @@ Model8::Model8()
     set =  new QVBoxLayout();
     LoadModel();
 
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментальное построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количество значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
 
     QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
     nam->setWordWrap(true);
+
+
     set->addWidget(nam);
 
 
@@ -36,8 +55,6 @@ void Model8::LoadModel()
     Qt3DCore::QEntity *p2 = addObject(ent, ":/Stands/Math8/plas.obj", ":/Stands/Math8/plas.jpg");
     Qt3DCore::QEntity *gp1 = addObject(ent, ":/Stands/Math8/shar.obj", ":/Stands/Math8/plas.jpg");
     Qt3DCore::QEntity *gp2 = addObject(ent, ":/Stands/Math8/rope.obj", ":/Stands/Math8/rope.jpg");
-
-
 
 
     tr1 = new Qt3DCore::QTransform();

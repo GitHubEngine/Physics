@@ -16,6 +16,24 @@ Model7::Model7()
     nam->setWordWrap(true);
     set->addWidget(nam);
 
+
+    QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
+    sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
+    cGraf = new QCheckBox("Моментальное построение графиков");
+    connect(sGraf, &QSlider::valueChanged, [=](int d){
+        lGraf->setText(QString("Количество значений: %1").arg(d));
+    });
+    cGraf->setCheckState(Qt::Checked);
+    connect(cGraf, &QCheckBox::stateChanged, [=](int k){
+        if (k == 0)
+            sGraf->setEnabled(false);
+        else
+            sGraf->setEnabled(true);
+    });
+    inf->addWidget(cGraf);
+    inf->addWidget(lGraf);
+    inf->addWidget(sGraf);
+
     tr1->setTranslation(QVector3D(0., 0.1 + h * 1.4, 0.));
 
 
