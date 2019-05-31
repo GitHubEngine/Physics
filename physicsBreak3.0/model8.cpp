@@ -16,6 +16,10 @@ Model8::Model8()
     w_lable = new QLabel(QString("Угол отклонения").arg(0));
     an_lable = new QLabel(QString("Угловая скорость").arg(0));
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
+
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
     cGraf = new QCheckBox("Моментальное построение графиков");
@@ -110,6 +114,10 @@ void Model8::LoadModel()
     Qt3DCore::QEntity *shar = addObject(ent, ":/Stands/Math8/shar.obj", ":/Stands/Math8/plas.jpg");
     Qt3DCore::QEntity *rope = addObject(ent, ":/Stands/Math8/rope.obj", ":/Stands/Math8/rope.jpg");
 
+    addObject(ent, ":/Stands/Math8/gen.obj", ":/Stands/Math8/gen.jpg");
+    addObject(ent, ":/Stands/Math8/reg.obj", ":/Stands/Math8/reg.jpg");
+    addObject(ent, ":/Stands/Math8/but.obj", ":/Stands/Math8/but.jpg");
+
 
 
 
@@ -175,7 +183,7 @@ void Model8::compute(double dt)
 
     y1 += dt*((K1+2*K2+2*K3+K4)/6);
     y2 += dt*((k1+2*k2+2*k3+k4)/6);
-    w_lable->setText(QString("угловая скорость: %1 рад").arg(w));
+
 }
 
 void Model8::Update(double dt)
@@ -184,6 +192,7 @@ void Model8::Update(double dt)
     Compute(dt);
     rope_t->setRotationX(c_angle);
     shar_t->setTranslation( QVector3D(.0, 0.972f - y2*4, y1*4) );
+    w_lable->setText(QString("угловая скорость: %1 рад/с").arg(w));
 
     if (!cGraf->checkState() && (int64_t(t * 1000) % timesPrint == 0))
         for (auto plot : plots)
@@ -206,7 +215,7 @@ void Model8::Compute(double dt)
     float l_D = D*0.01;
     float l_L = L*0.01;
     q = 2 * PI * e_0 * l_D * U;
-    w = 2*PI/(2*l_d*sqrt(2*l_m/(l_U*q)));
+    w = 2.*PI/(2.*l_d*sqrt(2.*l_m/(l_U*q)));
     if (abs(c_angle) >= abs(angle))
     {
         if (c_angle>0) mark = -1;
@@ -230,7 +239,7 @@ double Model8::GetAngle()
 }
 double Model8::GetW()
 {
-    return w;
+    return y1 * 4;
 }
 void Model8::Update_plot(double dt, int maxtime)
 {
@@ -256,11 +265,11 @@ void Model8::CreatePlot(int plotID)
     {
     case 0:
         plot = new Plot([this]()->double{ return this->GetTime(); },
-                        [this]()->double{ return this->GetAngle(); }, "Угловое отклонение, рад", 10);
+                        [this]()->double{ return this->GetAngle(); }, "Угловое отклонение, рад", 5);
     break;
     case 1:
         plot = new Plot([this]()->double{ return this->GetTime(); },
-                        [this]()->double{ return this->GetW(); }, "Кинетическая энергия, Дж", 2);
+                        [this]()->double{ return this->GetW(); }, "Отклонение от центра, м", 1);
     break;
     }
 

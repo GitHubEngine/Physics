@@ -18,9 +18,10 @@ Model4::Model4()
     inf         = new QVBoxLayout;
 
     // init laboratry
-    addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
-    addObject(root, ":/Res/potolok.obj", ":/Res/potolok.jpg");
-    addObject(root, ":/Res/View.obj", ":/Res/View.jpg");
+    Qt3DCore::QEntity *p1 = addObject(root, ":/Res/Room.obj", ":/Res/Room.png");
+    Qt3DCore::QTransform *home = new Qt3DCore::QTransform();
+    p1->addComponent(home);
+    home->setTranslation({0.,0.2,0.});
     QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
     nam->setWordWrap(true);
     opt->addWidget(nam);
@@ -177,7 +178,7 @@ void Model4::CreatePlot(int plotID) const
                 [this]()->double{ return double(get_time()); },
                 [this]()->double{ return double(pendulum->Ek(get_time())); },
                 "Время, с", "Кинетическая энергия, Дж",
-                0, double(2.f * physics::T),
+                double(get_time()), double(get_time() + 2.f * physics::T),
                 0, double(1.2f * pendulum->Ek(0)));
     plot->setWindowTitle("График кинетической энергии маятника");
 
@@ -187,7 +188,7 @@ void Model4::CreatePlot(int plotID) const
                         [this]()->double{ return double(get_time()); },
                         [this]()->double{ return double(pendulum->Ep(get_time())); },
                         "Время, с", "Потенциальная энергия, Дж",
-                        0, double(2.f * physics::T),
+                        double(get_time()), double(get_time() + 2.f * physics::T),
                         0, double(1.2f * pendulum->Ep(physics::T / 4.f)));
             plot->setWindowTitle("График потенциальной энергии маятника");
 
@@ -197,7 +198,7 @@ void Model4::CreatePlot(int plotID) const
                     [this]()->double{ return double(get_time()); },
                     [this]()->double{ return double(pendulum->pos(get_time()).x()); },
                     "Время, с", "Смещение относительно положения равновесия, м",
-                    0, double(2.f * physics::T),
+                    double(get_time()), double(get_time() + 2.f * physics::T),
                     -double(pendulum->A),
                     double(pendulum->A));
         plot->setWindowTitle("График смещения маятника относительно положения равновесия");
@@ -210,7 +211,6 @@ void Model4::CreatePlot(int plotID) const
                     0, double(2.f * physics::T),
                     -10, 10);
         plot->setWindowTitle("График скорости маятника");
-        plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
     break;}
     case 4:{
             plot = new Plot4(
@@ -220,7 +220,6 @@ void Model4::CreatePlot(int plotID) const
                         0, 20,
                         0, 45);
             plot->setWindowTitle("График скорости пули от обратного квадратного корная массы пули");
-            plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
             plot->BuildMySpecificPlot();
             connect(b_slider, &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
             connect(k_slider, &QSlider::valueChanged, plot, &Plot4::BuildMySpecificPlot);
@@ -231,7 +230,7 @@ void Model4::CreatePlot(int plotID) const
                         [this]()->double{ return double(get_time()); },
                         [this]()->double{ return double(asinf(pendulum->pos(get_time()).x() / physics::l)); },
                         "Время, с", "Отклонение маятника, рад",
-                        0, double(2.f * physics::T),
+                        double(get_time()), double(get_time() + 2.f * physics::T),
                         -M_PI_2, M_PI_2);
             plot->setWindowTitle("График отклонения маятника от положения равновесия");
     break;}
@@ -244,7 +243,7 @@ void Model4::CreatePlot(int plotID) const
                                           pendulum->v(get_time()).x() /
                                       abs(pendulum->v(get_time()).x())); },
                     "Время, с", "Угловая скорость, рад/с",
-                    0, double(2.f * physics::T),
+                    double(get_time()), double(get_time() + 2.f * physics::T),
                     -M_PI_2, M_PI_2);
         plot->setWindowTitle("График угловой скорости маятника");
     break;}
@@ -253,8 +252,10 @@ void Model4::CreatePlot(int plotID) const
     if (plot) {
         plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
         plot->isFixed(move_plot_checkbox->isChecked());
-        QObject::connect(move_plot_checkbox, &QCheckBox::toggled, plot, &Plot4::isFixed);
-        connect(pendulum, &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
+        connect(move_plot_checkbox, &QCheckBox::toggled, plot, &Plot4::isFixed);
+        if (plotID != 4) {
+            connect(pendulum, &physics::MaterialPoint::timeChanged, plot, &Plot4::Update);
+        }
         plot->show();
     }
 

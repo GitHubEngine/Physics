@@ -80,12 +80,24 @@ Model6::Model6()
     }
 
     {
+        QLabel *k = new QLabel(QString("Радиус дисков: %1 м").arg(r_d0));
+        s5 = new QSlider(Qt::Horizontal); s5->setMinimum(1); s5->setMaximum(500); s5->setValue(int(r_d0 * 1000.));
+        connect(s5, &QSlider::valueChanged, [=]()
+        {
+        r_d0 = double(s5->value()) / 1000;
+        k->setText(QString("Радиус дисков: %1 м").arg(r_d0));
+        });
+        set->addWidget(k);
+        set->addWidget(s5);
+    }
+
+    {
         QLabel *k = new QLabel(QString("Высота от оси вращения незакреплённого диска: %1 м").arg(r1_0));
         k->setWordWrap(true);
         s4 = new QSlider(Qt::Horizontal); s4->setMinimum(5); s4->setMaximum(35); s4->setValue(int(r1_0 * 10.));
         connect(s4, &QSlider::valueChanged, [=]()
         {
-        r1_0 = double(s4->value()) / 10;
+        r1_0 = double(s4->value()) / 100;
         k->setText(QString("Высота от оси вращения незакреплённого диска: %1 м").arg(r1_0));
         Transform();
         });
@@ -103,7 +115,7 @@ void Model6::Transform()
     tr1->setRotationX(float(start[0] * toGrad));
     //tr2->setRotationX(float(Theta * toGrad));
     auto m = tr2->rotateAround(QVector3D(0.34f, 1.535f, 0.), float(start[0] * toGrad), QVector3D(1.f, 0., 0.));
-    m.translate(QVector3D(0.34f, float(1.438 - 0.72 * (r1_0 - 0.5) / (3.5)), 0.));
+    m.translate(QVector3D(0.34f, float(1.438 - 0.72 * (r1_0 * 10 - 0.5) / (3.5)), 0.));
     tr2->setMatrix(m);
 }
 
@@ -136,7 +148,7 @@ std::vector<double> Model6::fun(double t, std::vector<double> y0)
 
 double Model6::error(std::vector<double> yh, std::vector<double> y2h)
 {
-    return abs(yh[0] - y2h[0]) + abs(yh[1] - y2h[1]);
+    return fabs(yh[0] - y2h[0]) + fabs(yh[1] - y2h[1]);
 }
 
 std::vector<double> Model6::Runge(double h, std::vector<double> y0, double t)
@@ -167,8 +179,8 @@ std::vector<double> Model6::Runge(double h, std::vector<double> y0, double t)
     k[3] = y1[1] * h;
     l[3] = y1[0] * h;
 
-    a[0] = (k[0] + k[1] + k[2] + k[3]) / 6;
-    a[1] = (l[0] + l[1] + l[2] + l[3]) / 6;
+    a[0] = (k[0] + 2 * k[1] + 2 * k[2] + k[3]) / 6;
+    a[1] = (l[0] + 2 * l[1] + 2 * l[2] + l[3]) / 6;
 
     y1 = fun(t, y0);
 
@@ -279,12 +291,12 @@ void Model6::GetMenu(QMenu *m)
     connect(a1, &QAction::triggered, [=](){
         this->CreatePlot(0);
         if (cGraf->checkState())
-            this->Update_plot(0.001,sGraf->value());
+            this->Update_plot(0.01,sGraf->value());
     });
     connect(a2, &QAction::triggered, [=](){
         this->CreatePlot(1);
         if (cGraf->checkState())
-            this->Update_plot(0.001,sGraf->value());
+            this->Update_plot(0.01,sGraf->value());
     });
 }
 
@@ -293,10 +305,7 @@ void Model6::Update_plot(double dt, int maxtime)
     double a = start[0], w = start[1];
     Init();
     for (int i=0;i<maxtime;i++){
-        for (int j=0;j<timesPrint;++j)
-        {
-            Compute(0.01);
-        }
+        Compute(0.01);
         for (auto plot : plots)
             plot->Update();
     }

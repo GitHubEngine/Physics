@@ -10,7 +10,6 @@
 #include <cmath>
 #include "plot.h"
 #include "model4/measurer.h"
-
 Qt3DCore::QEntity *addObject(Qt3DCore::QEntity *, QString, QString);
 
 
@@ -41,7 +40,7 @@ private:
     Qt3DCore::QEntity *ent;
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *i3, *i4, *k1, *k2, *k3, *k4, *k5, *k6;
-    QSlider *s1, *s2, *s4, *s5, *s6;
+    QSlider *s1, *s2, *s4, *s5, *s6, *s7;
     QCheckBox *cGraf;
     QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *tr3;
@@ -195,18 +194,9 @@ public:
     Model4();
     void start() const;
 
-    float get_l() const;
-    float get_g() const;
-    float get_k() const;
-    float get_b() const;
-    float get_T() const;
-    float get_omega() const;
     float get_time()  const;
     QVBoxLayout *get_opt() const;
     QVBoxLayout *get_inf() const;
-    physics::bullet   *get_bullet() const;
-    physics::pendulum *get_pendulum() const;
-    physics::measurer *get_measurer() const;
     void CreatePlot(int) const;
 
     void Init();

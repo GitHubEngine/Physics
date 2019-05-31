@@ -145,8 +145,8 @@ void Model5::Transform()
     tr2->setRotation(QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), float(angle2 * toGrad)));
 
     double x1, x2;
-    x1 = -0.22 - sin(angle1) * (0.54 - 0.3 * (double(s3->maximum()) / 1000. - d) / (double(s3->maximum() - 100) / 1000.));
-    x2 = 0.22 - sin(angle2) * (0.54 - 0.3 * (double(s3->maximum()) / 1000. - d) / (double(s3->maximum() - 100) / 1000.));
+    x2 = -0.22 - sin(angle2) * (0.54 - 0.3 * (double(s3->maximum()) / 1000. - d) / (double(s3->maximum() - 100) / 1000.));
+    x1 = 0.22 - sin(angle1) * (0.54 - 0.3 * (double(s3->maximum()) / 1000. - d) / (double(s3->maximum() - 100) / 1000.));
     double m = (x1 + x2) / 2.;
     pruz->setScale3D(QVector3D(1.f, 1.f, float((x2 - x1) / 0.44)));
     pruz->setTranslation(QVector3D(-0.09f, float(0.54 + 0.3 * (double (s3->maximum()) / 1000. - d) / (double(s3->maximum() - 100) / 1000.)), float(m)));
@@ -170,11 +170,12 @@ void Model5::LoadModel()
     tr1 = new Qt3DCore::QTransform();
     tr2 = new Qt3DCore::QTransform();
     pruz = new Qt3DCore::QTransform();
+
     s1->addComponent(tr1);
     s2->addComponent(tr2);
     pr->addComponent(pruz);
-    tr1->setTranslation(QVector3D(-0.09f, 1.08f, -0.22f));
-    tr2->setTranslation(QVector3D(-0.09f, 1.08f, 0.22f));
+    tr1->setTranslation(QVector3D(-0.09f, 1.08f, 0.22f));
+    tr2->setTranslation(QVector3D(-0.09f, 1.08f, -0.22f));
     pruz->setTranslation(QVector3D(-0.09f, 0.54f, 0.0f));
 
 
@@ -210,7 +211,11 @@ void Model5::Func(double)
     angle1 = (F1+F2)/2;
     angle2 = (F1-F2)/2;
     Get_W_Wm();
-    E = abs(m*Start_angle1*Start_angle2*W*W/2);
+    if (Start_angle1==0)
+            E=m*g*l*(1-cos(Start_angle2));
+    else if (Start_angle2==0)
+        E=m*g*l*(1-cos(Start_angle1));
+    else E = abs(m*Start_angle1*Start_angle2*W*W/2);
     E1 = E*(1+cos((w1-w2)*t))/2;
     E2 = E*(1-cos((w1-w2)*t))/2;
 }
@@ -357,12 +362,12 @@ void Model5::GetMenu(QMenu *m)
     a2->addAction(a2_2);
 
     connect(a1_1, &QAction::triggered, [=](){
-        this->CreatePlot(2);
+        this->CreatePlot(3);
         if (cGraf->checkState())
             this->Update_plot(0.001,sGraf->value());
     });
     connect(a1_2, &QAction::triggered, [=](){
-        this->CreatePlot(3);
+        this->CreatePlot(2);
         if (cGraf->checkState())
             this->Update_plot(0.001,sGraf->value());
     });

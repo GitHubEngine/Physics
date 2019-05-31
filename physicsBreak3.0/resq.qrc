@@ -159,5 +159,26 @@
         <file>Sup/inst/menu_rooms2.jpg</file>
         <file>Sup/inst/scene.jpg</file>
         <file>Sup/inst/scene2.jpg</file>
+        <file>Stands/Math8/but.jpg</file>
+        <file>Stands/Math8/but.obj</file>
+        <file>Stands/Math8/gen.jpg</file>
+        <file>Stands/Math8/gen.obj</file>
+        <file>Stands/Math8/reg.jpg</file>
+        <file>Stands/Math8/reg.obj</file>
+        <file>Res/Tabl.jpg</file>
+        <file>Res/Tabl.obj</file>
+        <file>Sup/Math6/1.png</file>
+        <file>Sup/Math6/2.png</file>
+        <file>Sup/Math6/3.png</file>
+        <file>Sup/Math6/4.png</file>
+        <file>Sup/Math6/5.png</file>
+        <file>Sup/Math6/6.png</file>
+        <file>Sup/Math6/7.png</file>
+        <file>Sup/Math6/8.png</file>
+        <file>Sup/Math6/9.png</file>
+        <file>Sup/Math6/10.png</file>
+        <file>Sup/Math6/11.png</file>
+        <file>Sup/Math6/12.png</file>
+        <file>Sup/Math6/13.png</file>
     </qresource>
 </RCC>

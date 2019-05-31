@@ -304,7 +304,7 @@ void Model2::Update(double dt)
         Compute(0.0001);
     Transform();
     t->restart();
-    if (!cGraf->checkState() && (int64_t(time * 1000) % timesPrint == 0))
+    if (!cGraf->checkState() && (int64_t(time * 1000) % (timesPrint /5) == 0))
         for (auto plot : plots)
             if (plot->GetState() == Plot::State::Active)
                 plot->Update();
@@ -351,7 +351,7 @@ void Model2::Update_plot(double dt, int maxtime)
     double spsi      = psi;
     Init();
     for (int i=0;i<maxtime;i++){
-        for (int j=0;j<timesPrint;++j)
+        for (int j=0;j<timesPrint / 5;++j)
         {
             double delt = 0.001;
             for (double i = 0; i * 1e-5 < delt; ++i)

@@ -60,8 +60,8 @@ void Plot4::isFixed(bool fixed)
 void Plot4::Draw()
 {
     plot4->graph(0)->setData(args.toVector(), values.toVector(), true);
-    double d = args_end / 10.;
+    double d = (args_end - args_start) / 10.;
     if (!_isFixed && args.last() > args_end - d)
-        plot4->xAxis->setRange(args.last() - args_end + d, args.last() + d);
+        plot4->xAxis->setRange(args.last() - args_start + d, args.last() + d);
     plot4->replot();
 }

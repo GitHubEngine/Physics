@@ -96,7 +96,7 @@ Model1::Model1()
     k1 = new QLabel("Начальный угол отклонения: 0.0 град");
     k2 = new QLabel("Коэффициент сопротивления: 0.0");
     k3 = new QLabel("Циклическая частота: 0.02 рад/c");
-    k4 = new QLabel("Расстояние до шара: 0.1 м");
+    k4 = new QLabel("Расстояние от центра шара: 0.5 м");
     k5 = new QLabel("Коэффициент жесткости: 0.5");
     k6 = new QLabel("Масса: 1 кг");
 
@@ -115,7 +115,7 @@ Model1::Model1()
         this->c = double(s2->value())/100;
         k2->setText(QString("Коэффициент сопротивления: %1").arg(c));
     });
-    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(50); s4->setMaximum(500); s4->setValue(500);
+    s4 = new QSlider(Qt::Horizontal); s4->setMinimum(50); s4->setMaximum(500); s4->setValue(int(r * 1000.));
     connect(s4, &QSlider::valueChanged, [=]()
     {
         this->r = double(s4->value()) / 1000.;

@@ -12,6 +12,10 @@ Model7::Model7()
     set =  new QVBoxLayout();
     LoadModel();
 
+    QLabel *nam = new QLabel(QString("<center><big><b>%1</b></big></center>").arg(GetName()));
+    nam->setWordWrap(true);
+    set->addWidget(nam);
+
     QLabel *lGraf = new QLabel(QString("Количество значений: %1").arg(500));
     sGraf = new QSlider(Qt::Horizontal); sGraf->setMinimum(50); sGraf->setMaximum(15000); sGraf->setValue(500);
     cGraf = new QCheckBox("Моментальное построение графиков");
