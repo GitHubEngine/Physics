@@ -324,4 +324,9 @@ void Model7::lock(bool f)
     s1->setEnabled(!f);
     s2->setEnabled(!f);
     s3->setEnabled(!f);
+    if (!f)
+    {
+        angle = A0;
+        Transform();
+    }
 }

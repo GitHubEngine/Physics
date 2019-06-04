@@ -34,7 +34,7 @@ Model6::Model6()
     inf->addWidget(i2);
     set->addWidget(nam);
     set->addWidget(new QLabel(QString("Масса стрежня: %1 кг").arg(m_st0)));
-    set->addWidget(new QLabel(QString("Длинна стержня: %1 м").arg(l_st0)));
+    set->addWidget(new QLabel(QString("Длина стержня: %1 м").arg(l_st0)));
     QLabel *a1 = new QLabel(QString("Высота от оси вращения закреплённого диска: %1 м").arg(r2_0));
     a1->setWordWrap(true);
     set->addWidget(a1);
@@ -260,7 +260,7 @@ void Model6::CreatePlot(int plotID)
     case 0:{
     YSize= PI;
     plot = new Plot([this]()->double{ return this->t; },
-                        [this]()->double{ return this->start[0]; }, "График углового отклонения",abs(YSize));
+                        [this]()->double{ return this->start[0]; }, "График углового отклонения, рад",abs(YSize));
 
     break;}
     case 1:{
