@@ -338,3 +338,12 @@ std::vector<double> Model6::step(double &h, std::vector<double> ystart,double ep
     return yh;
 }
 
+void Model6::lock(bool f)
+{
+    s1->setEnabled(!f);
+    s2->setEnabled(!f);
+    s3->setEnabled(!f);
+    s4->setEnabled(!f);
+    s5->setEnabled(!f);
+}
+

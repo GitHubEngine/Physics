@@ -30,7 +30,7 @@ Model1::Model1()
     R = 0.0025;
     r = 0.5;
     k = 0.01;
-    c = 0;
+    c = 1;
     m = 1;
     angle = 0.;
     beta = 0.;
@@ -94,10 +94,10 @@ Model1::Model1()
     inf->addWidget(i4);
 
     k1 = new QLabel("Начальный угол отклонения: 0.0 град");
-    k2 = new QLabel("Коэффициент сопротивления: 0.0");
+    k2 = new QLabel("Коэффициент сопротивления среды: 1 Н*м/рад");
     k3 = new QLabel("Циклическая частота: 0.02 рад/c");
     k4 = new QLabel("Расстояние от центра шара: 0.5 м");
-    k5 = new QLabel("Коэффициент жесткости: 0.5");
+    k5 = new QLabel("Коэффициент жесткости стержня: 0.5 Н*с/м");
     k6 = new QLabel("Масса: 1 кг");
 
 
@@ -109,11 +109,11 @@ Model1::Model1()
         k1->setText(QString("Начальный угол отклонения: %1 град").arg(angle * toGrad));
         Transform();
     });
-    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(0); s2->setMaximum(500);s2->setValue(0);
+    s2 = new QSlider(Qt::Horizontal); s2->setMinimum(100); s2->setMaximum(500);s2->setValue(100);
     connect(s2, &QSlider::valueChanged, [=]()
     {
         this->c = double(s2->value())/100;
-        k2->setText(QString("Коэффициент сопротивления: %1").arg(c));
+        k2->setText(QString("Коэффициент сопротивления среды: %1 Н*м/рад").arg(c));
     });
     s4 = new QSlider(Qt::Horizontal); s4->setMinimum(50); s4->setMaximum(500); s4->setValue(int(r * 1000.));
     connect(s4, &QSlider::valueChanged, [=]()
@@ -126,14 +126,15 @@ Model1::Model1()
     connect(s5, &QSlider::valueChanged, [=]()
     {
         this->k = double(s5->value())/100;
-        k5->setText(QString("Коэффициент жесткости: %1").arg(k));
+        k5->setText(QString("Коэффициент жесткости стержня: %1 Н*с/м").arg(k));
     });
-    s6 = new QSlider(Qt::Horizontal); s6->setMinimum(1); s6->setMaximum(2000);s6->setValue(1000);
+    s6 = new QSlider(Qt::Horizontal); s6->setMinimum(10); s6->setMaximum(200);s6->setValue(100);
     connect(s6, &QSlider::valueChanged, [=]()
     {
-        this->m = double(s6->value()) / 1000.;
+        this->m = double(s6->value()) / 100.;
         k6->setText(QString("Масса: %1 кг").arg(m));
     });
+    c0 = new QCheckBox("Моделирование гармонических колебаний");
 
 
     set->addWidget(k1);
@@ -144,6 +145,7 @@ Model1::Model1()
     set->addWidget(s4);
     set->addWidget(k2);
     set->addWidget(s2);
+    set->addWidget(c0);
     set->addWidget(k5);
     set->addWidget(s5);
 }
@@ -151,7 +153,11 @@ Model1::Model1()
 void Model1::Init()
 {
     t = 0.;
-
+    if (c0->checkState())
+    {
+        c = 0;
+        k2->setText(QString("Коэффициент сопротивления среды: 0 Н*м/рад"));
+    }
     J = 2*(2*m*R*R/5 + m*r*r);
     omega0 = sqrt(k/J);
     beta = c/(4*sqrt(m*k)*J);

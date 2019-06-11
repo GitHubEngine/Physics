@@ -41,7 +41,7 @@ private:
     QVBoxLayout *set, *inf;
     QLabel *i1, *i2, *i3, *i4, *k1, *k2, *k3, *k4, *k5, *k6;
     QSlider *s1, *s2, *s4, *s5, *s6, *s7;
-    QCheckBox *cGraf;
+    QCheckBox *cGraf, *c0;
     QSlider *sGraf;
     Qt3DCore::QTransform *tr1, *tr2, *tr3;
     QList<Plot *> plots;
@@ -71,6 +71,7 @@ public:
     ~Model1(){}
     void Update_plot(double dt, int maxtime);
 };
+
 
 class Model2 : public virtual Model, QObject
 {
@@ -316,7 +317,7 @@ public:
     QString GetName() {return "Колебания оборотного маятника";}
     std::vector <double> step(double &h, std::vector <double> ystart, double eps, double h0);
     ~Model6(){}
-    void lock(bool){}
+    void lock(bool);
 };
 
 class Model7 : public virtual Model, QObject

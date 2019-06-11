@@ -42,7 +42,7 @@ void Model3::LoadModel()
     tr1->setTranslation(QVector3D(0.0, 1.6f, 0.f));
     tr2->setTranslation(QVector3D(0.0, 0.6f, 0.f));
     tr3->setTranslation(QVector3D(0.0, 1.6f, 0.0));
-    tr4->setTranslation(QVector3D(0.0, 0.653f, 0.0));
+    tr4->setTranslation(QVector3D(0.0, 0.658f, 0.0));
 }
 Model3::Model3()
 {
@@ -246,7 +246,11 @@ void Model3::Update_plot(double dt, int maxtime)
 
 void Model3::lock(bool b)
 {
-    set->setEnabled(!b);
+    s1->setEnabled(!b);
+    s2->setEnabled(!b);
+    s3->setEnabled(!b);
+    s4->setEnabled(!b);
+    s5->setEnabled(!b);
 }
 
 

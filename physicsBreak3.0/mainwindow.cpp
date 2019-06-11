@@ -172,7 +172,7 @@ void MainWindow::mouseWheel(QWheelEvent *ev)
 void MainWindow::CreateEntity()
 {
     addObject(sceneEntity, ":/Res/Corridor.obj", ":/Res/Corridor.png");
-    //addObject(sceneEntity, ":/Res/Tabl.obj", ":/Res/Tabl.jpg");
+    addObject(sceneEntity, ":/Res/Tabl.obj", ":/Res/Tabl.jpg");
 
 }
 

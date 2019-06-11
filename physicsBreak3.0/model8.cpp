@@ -40,11 +40,11 @@ Model8::Model8()
 
     inf->addWidget(w_lable);
     {
-        QLabel *k = new QLabel(QString("Напряжение на конденсаторах: %1^5 B").arg(U));
+        QLabel *k = new QLabel(QString("Напряжение на конденсаторах: %1<sup>5</sup> B").arg(U));
         s1 = new QSlider(Qt::Horizontal); s1->setMinimum(9); s1->setMaximum(11); s1->setValue(10);
         connect(s1, &QSlider::valueChanged, [=]()
         {
-        k->setText(QString("Напряжение на конденсаторах: %1^5 В").arg(s1->value()));
+        k->setText(QString("Напряжение на конденсаторах: %1<sup>5</sup> В").arg(s1->value()));
         U = s1->value();
         });
         set->addWidget(k);
