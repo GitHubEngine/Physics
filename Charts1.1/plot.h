@@ -13,7 +13,7 @@ class Plot : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Plot(std::function<double()>, std::function<double()>, class MainWindow *parent, QWidget *p = nullptr);
+    explicit Plot(std::function<double()>, std::function<double()>, QString xAxis, QString yAxis, class MainWindow *parent, QWidget *p = nullptr);
 
     void resizeEvent(QResizeEvent *) override;
     void closeEvent(QCloseEvent *) override;
@@ -32,11 +32,7 @@ private:
     QList<double> args;
     QList<double> values;
 
-    double minValue;
-    double maxValue;
-    double maxArg;
-
-    void Draw(QVector<double> args, QVector<double> values);
+    void Draw(QVector<double> &args, QVector<double> &values);
 };
 
 #endif

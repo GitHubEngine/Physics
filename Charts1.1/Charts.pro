@@ -25,21 +25,43 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        cameracontroller.cpp \
         gyroscope.cpp \
+        help.cpp \
         main.cpp \
         mainwindow.cpp \
+        manual.cpp \
         plot.cpp \
-        qcustomplot.cpp
+        qcustomplot.cpp \
+    about.cpp \
+    splash.cpp \
+    trajectory.cpp
 
 HEADERS += \
+        cameracontroller.h \
         gyroscope.h \
+        help.h \
         mainwindow.h \
+        manual.h \
         plot.h \
-        qcustomplot.h
+        qcustomplot.h \
+    about.h \
+    splash.h \
+    drawline.h \
+    trajectory.h
 
 FORMS += \
+        help.ui \
         mainwindow.ui \
-        plot.ui
+        manual.ui \
+        plot.ui \
+    about.ui \
+    splash.ui
+
+RC_FILE = icon.rc
+
+QMAKE_CXXFLAGS_RELEASE -= -O3
+QMAKE_CXXFLAGS_RELEASE -= -O2
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -2,7 +2,7 @@
 #include "ui_plot.h"
 #include "mainwindow.h"
 
-Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, MainWindow *parent, QWidget *p) :
+Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, QString xLabel, QString yLabel, MainWindow *parent, QWidget *p) :
     QMainWindow(p),
     ui(new Ui::Plot),
     parent(parent),
@@ -13,15 +13,19 @@ Plot::Plot(std::function<double()> getarg, std::function<double()> getvalue, Mai
     plot = ui->PlotSurface;
 
     plot->addGraph();
-    plot->yAxis->setRange(0, 3);
+    plot->yAxis->setRange(getvalue() - 2, getvalue() + 2);
+    plot->xAxis->setRange(getarg() - 2, getarg() + 2);
 
-    minValue = maxValue = getvalue();
-    maxArg = getarg();
+    plot->xAxis->setLabel(xLabel);
+    plot->yAxis->setLabel(yLabel);
+
+    plot->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+    plot->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
 }
 
 void Plot::resizeEvent(QResizeEvent *re)
 {
-    ui->PlotSurface->setGeometry(0, 0, re->size().width(), re->size().height() * 0.75);
+    ui->PlotSurface->setGeometry(0, 0, re->size().width(), re->size().height());
 }
 
 void Plot::closeEvent(QCloseEvent *ce)
@@ -37,15 +41,6 @@ void Plot::Update()
     double arg = getarg();
     double value = getvalue();
 
-    if (value > maxValue)
-        maxValue = value;
-
-    if (value < minValue)
-        minValue = value;
-
-    if (maxArg < arg)
-        maxArg = arg;
-
     args.append(arg);
     values.append(value);
 
@@ -55,13 +50,14 @@ void Plot::Update()
         values.removeAt(0);
     }
 
-    Draw(args.toVector(), values.toVector());
+    QVector<double> vArgs = args.toVector();
+    QVector<double> vValues = values.toVector();
+    Draw(vArgs, vValues);
 }
 
-void Plot::Draw(QVector<double> args, QVector<double> values)
+void Plot::Draw(QVector<double> &args, QVector<double> &values)
 {
     plot->graph(0)->setData(args, values, true);
-    plot->xAxis->setRange(maxArg - 1, maxArg + 1);
     plot->replot();
 }
 
@@ -69,7 +65,6 @@ void Plot::Restart()
 {
     args.clear();
     values.clear();
-    plot->xAxis->setRange(-1, 1);
+    plot->graph(0)->setData(args.toVector(), values.toVector(), true);
     plot->replot();
-    maxArg = getarg();
 }

@@ -6,21 +6,33 @@
 #include <Qt3DRender>
 #include <Qt3DCore>
 
-const double g = 9.81;
-const double pi = 3.14159265359;
-const double radToDeg = 57.2957795131;
+const double g = 9.80665;
+const double pi = 3.1415926535897932;
+const double radToDeg = 57.2957795130823209;
 
 class Gyroscope
 {
 public:
-    Gyroscope(class MainWindow *parent, double mass, double radius, double length, double psi_dot, double phi_dot, double theta);
+    Gyroscope(class MainWindow *parent);
 
+    void Init();
     void Update(double dt);
 
+    double GetMass() {return mass; }
+    double GetRadius() { return radius; }
+    double GetLength() { return length; }
+    double GetTheta() { return theta; }
+    double GetPsiDot() { return psi_dot; }
+    double GetPhiDot() { return phi_dot; }
+    double GetThetaDot() { return theta_dot; }
     double GetPsi() { return psi; }
     double GetPhi() { return phi; }
-    double GetTheta() { return theta; }
     double GetTime() { return time; }
+    double GetEk();
+    double GetU() { return mass * g * length * cos(theta); }
+    double GetE() { return round((GetEk() + GetU()) * 10) / 10.0; }
+
+    QVector3D GetDiskPos() { return diskPos; }
 
     void SetMass(double mass);
     void SetRadius(double radius);

@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Res/Models/AxisMat.png</file>
+        <file>Res/Models/boxMat.png</file>
+        <file>Res/Models/DiskMat.png</file>
+        <file>Res/Models/standMat.png</file>
+        <file>Res/Models/axis.obj</file>
+        <file>Res/Models/box.obj</file>
+        <file>Res/Models/disk.obj</file>
+        <file>Res/Models/stand.obj</file>
+        <file>Res/Reference/1.png</file>
+        <file>Res/Reference/2.png</file>
+        <file>Res/Reference/3.PNG</file>
+        <file>Res/Reference/4.PNG</file>
+        <file>Res/Reference/5.PNG</file>
+        <file>Res/Reference/6.PNG</file>
+        <file>Res/Reference/7.PNG</file>
+        <file>Res/Manual/1.PNG</file>
+        <file>Res/Manual/2.PNG</file>
+        <file>Res/Manual/3.PNG</file>
+        <file>Res/Manual/4.PNG</file>
+        <file>Res/Manual/5.PNG</file>
+        <file>Res/Logos/NSTU.png</file>
+        <file>Res/Logos/icon.ico</file>
+        <file>Res/Models/floor.obj</file>
+        <file>Res/Models/floorMat.jpg</file>
+        <file>Res/Models/table.obj</file>
+        <file>Res/Models/tableMat.jpg</file>
+        <file>Res/Reference/8.PNG</file>
+        <file>Res/Logos/splash.jpg</file>
+    </qresource>
+</RCC>

@@ -1,31 +1,37 @@
 #include "gyroscope.h"
 #include "mainwindow.h"
 
-Gyroscope::Gyroscope(MainWindow *parent, double mass, double radius, double length, double psi_dot, double phi_dot, double theta)
+Gyroscope::Gyroscope(MainWindow *parent)
 {
     this->parent = parent;
-    this->mass = mass;
-    this->radius = radius;
-    this->length = length;
-    this->psi_dot = psi_dot;
-    this->phi_dot = phi_dot;
-    this->theta = theta;
+
+    LoadModel();
+
+    diskTransform = new Qt3DCore::QTransform();
+    axisTransform = new Qt3DCore::QTransform();
+    boxTransform = new Qt3DCore::QTransform();
+
+    disk->addComponent(diskTransform);
+    axis->addComponent(axisTransform);
+    box->addComponent(boxTransform);
+
+    Init();
+    CalculateConstants();
+}
+
+void Gyroscope::Init()
+{
+    this->mass = 0.1;
+    this->radius = 0.08;
+    this->length = 0.2;
+    this->psi_dot = 500;
+    this->phi_dot = 0;
+    this->theta = 1.5707963267948966;
 
     theta_dot = 0;
     phi = 0;
     psi = 0;
     time = 0;
-
-    CalculateConstants();
-    LoadModel();
-
-    diskTransform = new Qt3DCore::QTransform();
-    axisTransform = new Qt3DCore::QTransform();
-    boxTransform = new  Qt3DCore::QTransform();
-
-    disk->addComponent(diskTransform);
-    axis->addComponent(axisTransform);
-    box->addComponent(boxTransform);
 
     SetTransform();
 }
@@ -34,6 +40,13 @@ void Gyroscope::Update(double dt)
 {
     CalculateValues(dt);
     Transform();
+}
+
+double Gyroscope::GetEk()
+{
+    return 0.5 * (I0 * (theta_dot * theta_dot + phi_dot * phi_dot * sin(theta) * sin(theta)) +
+            I_psi * (psi_dot + phi_dot * cos(theta)) * (psi_dot + phi_dot * cos(theta)));
+
 }
 
 void Gyroscope::SetMass(double mass)
@@ -96,7 +109,6 @@ void Gyroscope::CalculateConstants()
     I0 = mass * length * length + I_psi * 0.5;
     L_psi = I_psi * (phi_dot * cos(theta) + psi_dot);
     L_phi = I0 * phi_dot * sin(theta) * sin(theta) + L_psi * cos(theta);
-
 }
 
 void Gyroscope::CalculateValues(double dt)
@@ -156,15 +168,15 @@ void Gyroscope::Transform()
                sin(pi / 2 - theta)*(0.56 + 10 * length),
                cos(pi / 2 - theta)*cos(phi)*(0.56 + 10 * length));
 
-    diskTransform->setTranslation(diskPos);
+    diskTransform->setTranslation(diskPos * length / 0.2);
 }
 
 void Gyroscope::LoadModel()
 {
-    disk = parent->addObject(":/Res/disk.obj", ":/Res/DiskMat.png");
-    axis = parent->addObject(":/Res/axis.obj", ":/Res/AxisMat.png");
-    box = parent->addObject(":/Res/box.obj", ":/Res/boxMat.png");
-    stand = parent->addObject(":/Res/stand.obj", ":/Res/standMat.png");
+    disk = parent->addObject(":/Res/Models/disk.obj", ":/Res/Models/DiskMat.png",  QColor::fromRgb(170, 170, 170));
+    axis = parent->addObject(":/Res/Models/axis.obj", ":/Res/Models/AxisMat.png",  QColor::fromRgb(170, 170, 170));
+    box = parent->addObject(":/Res/Models/box.obj", ":/Res/Models/boxMat.png", QColor::fromRgb(170, 170, 170));
+    stand = parent->addObject(":/Res/Models/stand.obj", ":/Res/Models/standMat.png", QColor::fromRgb(170, 170, 170));
 }
 
 void Gyroscope::SetTransform()
@@ -173,11 +185,15 @@ void Gyroscope::SetTransform()
                sin(pi / 2 - theta)*(0.56 + 10 * length),
                cos(pi / 2 - theta)*cos(phi)*(0.56 + 10 * length));
 
-    nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), 57.2957795131 * theta - 90);
+    rotation = QQuaternion::fromAxisAndAngle(QVector3D(0.0, 0.0, 1.0),  radToDeg * psi);
+    precession = QQuaternion::fromAxisAndAngle(QVector3D(0.0, 1.0, 0.0), radToDeg * phi);
+    nutation = QQuaternion::fromAxisAndAngle(QVector3D(1.0, 0.0, 0.0), radToDeg * theta - 90);
+
     diskTransform->setRotation(precession * nutation * rotation);
     axisTransform->setRotation(precession * nutation);
+    boxTransform->setRotation(precession);
 
-    diskTransform->setScale3D(QVector3D(10 * radius,  10 * radius, 1.0));
+    diskTransform->setScale3D(QVector3D(12 * radius,  12 * radius, 1.0));
     diskTransform->setTranslation(diskPos * length / 0.2);
 }
 
