@@ -62,6 +62,7 @@ void Trajectory::Draw(QVector3D point)
             dots.pop_front();
 
     positionAttr->setCount(dots.size() / 3);
+    indexAttr->setCount(dots.size() / 3);
     vertexBytes->resize(dots.size() * sizeof(float));
 
     float *pos = reinterpret_cast<float*>(vertexBytes->data());
@@ -86,6 +87,7 @@ void Trajectory::Clear(QVector3D point)
     vertexBytes->clear();
     vertexBytes->resize(3 * 2 * sizeof(float));
     positionAttr->setCount(2);
+    indexAttr->setCount(2);
 
     float *pos = reinterpret_cast<float*>(vertexBytes->data());
     for (auto x : dots)
