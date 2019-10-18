@@ -23,6 +23,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 CONFIG += c++11
+CONFIG += static
+CONFIG += install_ok
+CONFIG += release
+
+INCLUDEPATH += -L"D:/Qt/static/5.12.2/include"
+LIBS += -L"D:/Qt/static/5.12.2/lib"
 
 SOURCES += \
         cameracontroller.cpp \
@@ -47,7 +53,6 @@ HEADERS += \
         qcustomplot.h \
     about.h \
     splash.h \
-    drawline.h \
     trajectory.h
 
 FORMS += \

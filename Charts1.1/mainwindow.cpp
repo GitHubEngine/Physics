@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "drawline.h"
 #include "plot.h"
 #include "gyroscope.h"
 #include "help.h"
@@ -52,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addObject(":/Res/Models/floor.obj", ":/Res/Models/floorMat.jpg", QColor::fromRgb(160, 160, 160), 8);
 
     traj = new Trajectory(baseEntity);
+    traj->SetDot(gyro->GetDiskPos() * 1.2);
 }
 
 MainWindow::~MainWindow()
@@ -242,7 +242,7 @@ void MainWindow::on_action_2_triggered()
 
 void MainWindow::on_action_3_triggered()
 {
-    Plot *plot = new Plot([this]()->double{ return gyro->GetTime(); },
+    Plot *plot = new Plot([this]()->double{ return gyro->GetTime() * 3; },
                           [this]()->double{ return gyro->GetTheta(); },
                           "Время, с",
                           "Угол нутации, рад",
@@ -255,7 +255,7 @@ void MainWindow::on_action_3_triggered()
 
 void MainWindow::on_action_5_triggered()
 {
-    Plot *plot = new Plot([this]()->double{ return gyro->GetTime(); },
+    Plot *plot = new Plot([this]()->double{ return gyro->GetTime() * 3; },
                           [this]()->double{ return gyro->GetEk(); },
                           "Время, с",
                           "Кинетическая энергия, Дж",
@@ -268,7 +268,7 @@ void MainWindow::on_action_5_triggered()
 
 void MainWindow::on_action_6_triggered()
 {
-    Plot *plot = new Plot([this]()->double{ return gyro->GetTime(); },
+    Plot *plot = new Plot([this]()->double{ return gyro->GetTime() * 3; },
                           [this]()->double{ return gyro->GetU(); },
                           "Время, с",
                           "Потенциальная энергия, Дж",
@@ -281,7 +281,7 @@ void MainWindow::on_action_6_triggered()
 
 void MainWindow::on_action_7_triggered()
 {
-    Plot *plot = new Plot([this]()->double{ return gyro->GetTime(); },
+    Plot *plot = new Plot([this]()->double{ return gyro->GetTime() * 3; },
                           [this]()->double{ return gyro->GetE(); },
                           "Время, с",
                           "Полная энергия, Дж",

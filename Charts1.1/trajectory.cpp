@@ -51,6 +51,26 @@ Trajectory::Trajectory(Qt3DCore::QEntity *rootEntity)
     lineEntity->addComponent(line);
 }
 
+void Trajectory::SetDot(QVector3D point)
+{
+    dots.append(point.x());
+    dots.append(point.y());
+    dots.append(point.z());
+    dots.append(point.x());
+    dots.append(point.y());
+    dots.append(point.z());
+
+    positionAttr->setCount(2);
+    indexAttr->setCount(2);
+    vertexBytes->resize(dots.size() * sizeof(float));
+
+    float *pos = reinterpret_cast<float*>(vertexBytes->data());
+    for (auto x : dots)
+        *pos++ = x;
+
+    vertexBuffer->setData(*vertexBytes);
+}
+
 void Trajectory::Draw(QVector3D point)
 {   
     dots.append(point.x());
