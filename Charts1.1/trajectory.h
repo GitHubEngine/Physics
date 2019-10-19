@@ -34,7 +34,7 @@ private:
     QByteArray *vertexBytes;
     QByteArray *indexBytes;
 
-    int dotsAmount = 300;
+    int dotsAmount = 1000;
     QList<float> dots;
 
     Qt3DCore::QEntity *lineEntity;

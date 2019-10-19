@@ -51,7 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
     addObject(":/Res/Models/floor.obj", ":/Res/Models/floorMat.jpg", QColor::fromRgb(160, 160, 160), 8);
 
     traj = new Trajectory(baseEntity);
-    traj->SetDot(gyro->GetDiskPos() * 1.2);
+    QVector3D pos = gyro->GetDiskPos();
+    pos.normalize();
+    traj->SetDot(pos * 3.08);
 }
 
 MainWindow::~MainWindow()
@@ -101,7 +103,9 @@ void MainWindow::Update()
         for (auto plot : plots)
             plot->Update();
 
-        traj->Draw(gyro->GetDiskPos() * 1.2);
+        QVector3D pos = gyro->GetDiskPos();
+        pos.normalize();
+        traj->Draw(pos * 3.08);
     }
 
     if (isTimerEnabled)
@@ -182,7 +186,9 @@ void MainWindow::on_stop_clicked()
     for (auto plot : plots)
         plot->Restart();
 
-    traj->Clear(gyro->GetDiskPos() * 1.2);
+    QVector3D pos = gyro->GetDiskPos();
+    pos.normalize();
+    traj->Clear(pos * 3.08);
 }
 
 void MainWindow::on_lengthS_valueChanged(int value)
@@ -220,6 +226,10 @@ void MainWindow::on_thetaS_valueChanged(int value)
     gyro->SetTheta(value * 0.001);
     ui->thetaL->setText(QString("Наклон относительно вертикальной оси: %1 град").arg(round(gyro->GetTheta() / DegToRad)));
 
+    QVector3D pos = gyro->GetDiskPos();
+    pos.normalize();
+    traj->Clear(pos * 3.08);
+    traj->SetDot(pos * 3.08);
 }
 
 void MainWindow::on_action_triggered()
